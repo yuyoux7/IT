@@ -1,6 +1,6 @@
-﻿#include<iostream>
-#include<windows.h>
-#include<conio.h>
+﻿#include <iostream>
+#include <windows.h>
+#include <conio.h>
 #define clin scanf_s("%*[^\n]"); scanf_s("%*c");
 #define cls system("cls");
 #define LV_max 5
