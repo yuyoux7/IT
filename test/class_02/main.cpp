@@ -2,10 +2,10 @@
 int main()
 {
   char ch;
-  printf("input / or '");
+  printf("input \ or '");
   scanf("%c", &ch);
-  if(ch == '/')
-    printf("/");
+  if(ch == '\')
+    printf("\");
   else if(ch == ''')
     printf("'");
   else
