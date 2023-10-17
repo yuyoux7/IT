@@ -1,2 +1,2 @@
 # About code
-The code is to test if can find bug or not.
+The code is  test  can find bug or not.
