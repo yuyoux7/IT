@@ -2,7 +2,7 @@
 int main()
 {
   char ch;
-  printf("input \ or '");
+  printf("input \ or ':");
   scanf("%c", &ch);
   if(ch == '\')
     printf("\");
@@ -10,7 +10,7 @@ int main()
     printf("'");
   else
   {
-    printf("please retry");
+    printf("please retry\n");
     main();
   }
 }
