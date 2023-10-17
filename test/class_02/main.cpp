@@ -11,5 +11,6 @@ int main()
   else
   {
     printf("please retry");
+    main();
   }
 }
