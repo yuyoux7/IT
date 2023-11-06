@@ -26,6 +26,8 @@ int def(int monden,int zundun)
 {
     if(zundun != 5)
     return (monden - 100);
+    else
+    return 0;
 }
 int atk(int inshin,int seve)
 {
