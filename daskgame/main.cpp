@@ -3,24 +3,24 @@
 #define max_player 5
 #define die_line -100
 #define cls system("cls");
-int atk_dem;
+int atk_dem, number = 1;
 using namespace std;
 struct Data
 {
-    string name;//名稱
-    int live = 1;//是否活著
-    int lewgue;//理解 6d*2
-    int seve;//存在 6d*2
-    int inshin;//影響 6d
-    int monden = 100;//錨定 100
-    int see = NULL;//觀測 0
-    int san = 100;//理智 100
-    int zundun;/*種族
-    [1.人 see +5 
-     2.神 lewgue +5 
-     3.妖 inshin +5 
-     4.污 define san 50 
-     5.鬼 define monden 50]*/
+    string name;//¦WºÙ
+    int live;//¬O§_¬¡µÛ
+    int lewgue;//²z¸Ñ 6d*2
+    int seve;//¦s¦b 6d*2
+    int inshin;//¼vÅT 6d
+    int monden;//Áã©w 100
+    int see;//Æ[´ú 0
+    int san;//²z´¼ 100
+    int zundun;/*ºØ±Ú
+    [1.¤H see +5 
+     2.¯« lewgue +5 
+     3.§¯ inshin +5 
+     4.¦Ã define san 50 
+     5.°­ define monden 50]*/
 };
 int def(int monden,int zundun)
 {
@@ -42,6 +42,7 @@ int atk_int(int atk,int def)
 }
 void atk_real()
 {
+	Data player[max_player];
     int atk_n = 0,def_n;
     atk_n = atk(player[number].inshin, player[number].seve);
     def_n = def(player[number].monden, player[number].zundun);
@@ -49,28 +50,35 @@ void atk_real()
 }
 int main()
 {
-    int number = 1, player_count;
+    int player_count, out;
     Data player[max_player];
+    cout << "Player Count:";
     cin >> player_count;
     if(player_count >= max_player)
     player_count = max_player;
     else if(player_count <= 1)
     player_count = 1;
-    for(number = 1;number <= player_count;number++)
-{
+    for(number = 1;number != player_count + 1;number++)
+    {
+    cout << "Player Name:";
     cin >> player[number].name;
     cout << number;
     Sleep(1000);
     cls;
-}
-    while(true)
+    };
+    for(out = 0;out != 1;out--)
     {
     cout << "Enter Player Number:";
     cin >> number;
+    if(number >= max_player)
+    number = max_player;
+    else if(number <= 1)
+    number = 1;
     cout << "Player Name:" << player[number].name << endl;
-    cout << "Player 種族:" << player[number].zundun << endl;
-    cout << "Player Live:" << player[number].live ? "YES" : "NO" << endl;
-
+    cout << "Player ºØ±Ú:" << player[number].zundun << endl;
+    cout << "Player Live:" << player[number].live << endl;
+    cout << atk_dem;
+	Sleep(1000);
     cls;
     }
 }
