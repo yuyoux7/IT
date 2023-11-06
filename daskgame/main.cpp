@@ -32,6 +32,15 @@ int atk_int(int atk,int def)
 {
     if(atk - def > 0)
     return (atk - def);
+    else
+    return 0;
+}
+void atk_real()
+{
+    int atk_n = 0,def_n;
+    atk(player[number].inshin, player[number].seve);
+    def(player[number].monden, player[number].zundun);
+    atk_int(atk_n,def_n);
 }
 int main()
 {
