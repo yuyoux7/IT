@@ -1,15 +1,6 @@
 #include <iostream>
 #define max_player 5
 using namespace std;
-int def()
-{
-    if(!=5.)
-    return (denfun monden - 100 );
-}
-int atk()
-{
-    return (inshin - seve);
-}
 struct Data
 {
     string name;//名稱
@@ -21,6 +12,20 @@ struct Data
     int san;//理智 100
     int zundun;//種族 [1.人 see +5 2.神 lewgue +5 3.妖 inshin +5 4.污 define san 50 5.鬼 define monden 50]
 };
+int def(int monden,int zundun)
+{
+    if(zundun != 5)
+    return (monden - 100);
+}
+int atk(int inshin,int seve)
+{
+    return (inshin - seve);
+}
+int atk_int(int atk,int def)
+{
+    if(atk - def > 0)
+    return (atk - def);
+}
 int main()
 {
     int number = 1, player_count;
