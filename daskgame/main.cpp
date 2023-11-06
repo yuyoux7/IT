@@ -15,7 +15,7 @@ struct Data
     int monden;//錨定 100
     int see;//觀測 0
     int san;//理智 100
-    int zundun;//種族
+    int zundun;/*種族
     [1.人 see +5 
      2.神 lewgue +5 
      3.妖 inshin +5 
