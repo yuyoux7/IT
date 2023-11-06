@@ -7,20 +7,20 @@ int atk_dem, number = 1;
 using namespace std;
 struct Data
 {
-    string name;//¦WºÙ
-    int live;//¬O§_¬¡µÛ
-    int lewgue;//²z¸Ñ 6d*2
-    int seve;//¦s¦b 6d*2
-    int inshin;//¼vÅT 6d
-    int monden;//Áã©w 100
-    int see;//Æ[´ú 0
-    int san;//²z´¼ 100
-    int zundun;/*ºØ±Ú
-    [1.¤H see +5 
-     2.¯« lewgue +5 
-     3.§¯ inshin +5 
-     4.¦Ã define san 50 
-     5.°­ define monden 50]*/
+    string name;//使用者名稱
+    int live;//是否活著
+    int lewgue;//理智 6d*2
+    int seve;//存在 6d*2
+    int inshin;//影響 6d
+    int monden;//錨定 100
+    int see;//觀測 0
+    int san;//理智 100
+    int zundun;//種族
+    [1.人 see +5 
+     2.神 lewgue +5 
+     3.妖 inshin +5 
+     4.外 define san 50 
+     5.鬼 define monden 50]*/
 };
 int def(int monden,int zundun)
 {
@@ -75,7 +75,7 @@ int main()
     else if(number <= 1)
     number = 1;
     cout << "Player Name:" << player[number].name << endl;
-    cout << "Player ºØ±Ú:" << player[number].zundun << endl;
+    cout << "Player 種族:" << player[number].zundun << endl;
     cout << "Player Live:" << player[number].live << endl;
     cout << atk_dem;
 	Sleep(1000);
