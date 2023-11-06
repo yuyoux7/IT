@@ -3,6 +3,7 @@
 #define max_player 5
 #define die_line -100
 #define cls system("cls");
+int atk_dem;
 using namespace std;
 struct Data
 {
@@ -42,7 +43,7 @@ void atk_real()
     int atk_n = 0,def_n;
     atk_n = atk(player[number].inshin, player[number].seve);
     def_n = def(player[number].monden, player[number].zundun);
-    atk_int(atk_n,def_n);
+    atk_dem = atk_int(atk_n,def_n);
 }
 int main()
 {
@@ -60,9 +61,12 @@ int main()
     Sleep(1000);
     cls;
 }
-    
     while(true)
     {
+    cout << "Enter Player Number:";
     cin >> number;
+    cout << "Player Name:" << player[number].name << endl;
+    cout << "Player 種族:" << player[number].zundun << endl;
+    cout << "Player Live:" << player[number].live ? "YES" : "NO" << endl;
     }
 }
