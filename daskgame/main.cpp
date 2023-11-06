@@ -1,6 +1,8 @@
 #include <iostream>
+#include <windows.h>
 #define max_player 5
 #define die_line -100
+#define cls system("cls");
 using namespace std;
 struct Data
 {
@@ -38,8 +40,8 @@ int atk_int(int atk,int def)
 void atk_real()
 {
     int atk_n = 0,def_n;
-    atk(player[number].inshin, player[number].seve);
-    def(player[number].monden, player[number].zundun);
+    atk_n = atk(player[number].inshin, player[number].seve);
+    def_n = def(player[number].monden, player[number].zundun);
     atk_int(atk_n,def_n);
 }
 int main()
@@ -47,6 +49,20 @@ int main()
     int number = 1, player_count;
     Data player[max_player];
     cin >> player_count;
+    if(player_count >= max_player)
+    player_count = max_player;
+    else if(player_count <= 1)
+    player_count = 1;
+    for(number = 1;number <= player_count;number++)
+{
     cin >> player[number].name;
-    cout << player[number].name;
+    cout << number;
+    Sleep(1000);
+    cls;
+}
+    
+    while(true)
+    {
+    cin >> number;
+    }
 }
