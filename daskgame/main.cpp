@@ -15,5 +15,5 @@ int main()
     int number = 1;
     Data player[5];
     cin >> player[number].name;
-    cout << player[i].name;
+    cout << player[number].name;
 }
