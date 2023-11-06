@@ -13,8 +13,9 @@ struct Data
 };
 int main()
 {
-    int number = 1;
+    int number = 1, player_cout;
     Data player[max_player];
+    cin >> player_cout;
     cin >> player[number].name;
     cout << player[number].name;
 }
