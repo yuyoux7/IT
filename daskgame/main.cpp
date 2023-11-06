@@ -68,5 +68,7 @@ int main()
     cout << "Player Name:" << player[number].name << endl;
     cout << "Player 種族:" << player[number].zundun << endl;
     cout << "Player Live:" << player[number].live ? "YES" : "NO" << endl;
+
+    cls;
     }
 }
