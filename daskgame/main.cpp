@@ -7,7 +7,8 @@
 #define max_player 6
 #define die_line -100
 #define cls system("cls");
-int atk_dem, number = 1;
+int atk_dem = NULL, number = 1;
+int win = false, game_over = false;
 using namespace std;
 struct Data
 {
@@ -134,8 +135,12 @@ int main()
         Sleep(2000);
         cls;
     };
-    for (out = 0; out != 1;)
+    for (out = false; out != true;)
     {
+        if(win == true || game_over == true)
+        {
+            out = true;
+        }
         cout << "Enter Player Number:";
         cin >> number;
         if (number >= max_player)
@@ -182,7 +187,7 @@ int main()
             cout << "4.理解值:" << player[number].lewgue << endl;
             cout << "5.觀測值:" << player[number].see << endl;
             cout << "6.理智值:" << player[number].san << endl;
-            for (zundun = 0; zundun != 1;)
+            for (zundun = false; zundun != true;)
             {
                 cout << "沒有數值修改請輸入0" << endl << "需要修改的數值:NO._\b";
                 cin >> fn1;
@@ -231,11 +236,11 @@ int main()
                     cin >> ch;
                     if (ch == 'y' || ch == 'Y')
                     {
-                        zundun = 0;
+                        zundun = false;
                     }
                     else
                     {
-                        zundun = 1;
+                        zundun = true;
                     }
                 }
             }
@@ -243,7 +248,7 @@ int main()
             cin >> ch;
             if (ch == 'y' || ch == 'Y')
             {
-                for (fn1 = 0; fn1 != 1;)
+                for (fn1 = false; fn1 != true;)
                 {
                     cout << "輸入玩家編號為自身編號，取消攻擊" << endl << "選擇玩家編號:NO._\b";
                     cin >> other_number;
@@ -256,17 +261,17 @@ int main()
                         if (atk_dem <= 0)
                         {
                             cout << "攻擊失敗" << endl;
-                            fn1 = 1;
+                            fn1 = true;
                         }
                         else
                         {
                             cout << "攻擊成功" << endl;
-                            fn1 = 1;
+                            fn1 = true;
                         }
                     }
                     else if (other_number == number)
                     {
-                        fn1 = 1;
+                        fn1 = true;
                     }
                     else
                         cout << "查無此人，請重新輸入" << endl;
