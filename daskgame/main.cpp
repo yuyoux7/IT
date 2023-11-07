@@ -14,6 +14,7 @@ struct Data
 {
     string name;//使用者名稱
     int live;//是否活著
+    int winner;//是否獲勝
     int lewgue;//理解 6d*2
     int seve;//存在 6d*2
     int inshin;//影響 6d
@@ -132,6 +133,7 @@ int main()
             player[number].see = 0;
         }
         player[number].seve = 2 * d;
+        player[number].winner = false;
         Sleep(2000);
         cls;
     };
