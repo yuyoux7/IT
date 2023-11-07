@@ -287,14 +287,17 @@ int main()
         if (player[number].inshin <= die_line)
         {
             cout << player[number].name << "對世界影響力消失";
+            Sleep(1000);
         }
         if (player[number].seve <= die_line)
         {
             cout << player[number].name << "的存在完全消失";
+            Sleep(1000);
         }
         if (player[number].lewgue <= die_line)
         {
             cout << player[number].name << "被世界厭惡而排斥到虛空中";
+            Sleep(1000);
         }
         Sleep(500);
         cls;
