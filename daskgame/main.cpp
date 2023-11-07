@@ -4,7 +4,7 @@
 #include<ctime>
 /*#include <fstream>
 #include <windows.data.json.h>*/
-#define max_player 6
+#define max_player 6 //0號位不使用
 #define die_line -100
 #define cls system("cls");
 int atk_dem = NULL, number = 1;
