@@ -6,8 +6,10 @@
 #include <windows.data.json.h>*/
 #define max_player 6 //0號位不使用
 #define die_line -100
+#define false 0
+#define true 1
 #define cls system("cls");
-int atk_dem = NULL, number = 1, turn = 25, run = 1;
+int atk_dem = NULL, number = 1, turn = 3, run = 1;
 int win = false, game_over = false;
 using namespace std;
 struct Data
@@ -43,7 +45,7 @@ int atk_1(int mod_dan, int mod_dff)
 int atk_int(int atk, int def)
 {
     if (atk - def > 0)
-        return (atk - def);
+        return (atk - def) / 2;
     else
         return 0;
 }
@@ -66,6 +68,7 @@ int main()
     {
         player_count = 1;
     }
+    cls;
     for (number = 1; number != player_count + 1; number++)
     {
         cout << "玩家名稱:";
@@ -83,7 +86,7 @@ int main()
         player[number].zundun = zundun;
         cout << "六面骰子點數:";
         cin >> d;
-        if (d >= 6) 
+        if (d >= 6)
         {
             d = 6;
         }
@@ -114,15 +117,15 @@ int main()
         {
             player[number].monden = 50;
         }
-        else 
+        else
         {
             player[number].monden = 100;
         }
-        if (player[number].zundun == 4) 
+        if (player[number].zundun == 4)
         {
             player[number].san = 50;
         }
-        else 
+        else
         {
             player[number].san = 100;
         }
@@ -141,11 +144,8 @@ int main()
     };
     for (out = false; out != true;)
     {
-        if(win == true || game_over == true)
-        {
-            out = true;
-        }
-        cout << "輸入玩家編號:";
+        cout << "\033[6;50H剩餘輪次:" << turn - 1;
+        cout << "\033[1;1H輸入玩家編號:";
         cin >> number;
         if (number >= max_player)
             number = max_player - 1;
@@ -191,125 +191,148 @@ int main()
             cout << "4.理解值:" << player[number].lewgue << endl;
             cout << "5.觀測值:" << player[number].see << endl;
             cout << "6.理智值:" << player[number].san << endl;
-            for (zundun = false; zundun != true;)
+            if (player[number].winner == false)
             {
-                cout << "沒有數值修改請輸入0" << endl << "需要修改的數值:NO._\b";
-                cin >> fn1;
-                if (fn1 >= 6)
-                    fn1 = 6;
-                else if (fn1 <= -1)
-                    fn1 = 0;
-                switch (fn1)
+                for (zundun = false; zundun != true;)
                 {
-                case 0:
-                	zundun = true;
-                    break;
-                case 1:
-                    cout << "存在修改值:";
-                    cin >> add;
-                    player[number].seve += add;
-                    break;
-                case 2:
-                    cout << "影響修改值:";
-                    cin >> add;
-                    player[number].inshin += add;
-                    break;
-                case 3:
-                    cout << "錨定修改值:";
-                    cin >> add;
-                    player[number].monden += add;
-                    break;
-                case 4:
-                    cout << "理解修改值:";
-                    cin >> add;
-                    player[number].lewgue += add;
-                    break;
-                case 5:
-                    cout << "觀測修改值:";
-                    cin >> add;
-                    player[number].see += add;
-                    break;
-                case 6:
-                    cout << "理智修改值:";
-                    cin >> add;
-                    player[number].san += add;
-                    break;
+                    cout << "沒有數值修改請輸入0" << endl << "需要修改的數值:NO._\b";
+                    cin >> fn1;
+                    if (fn1 >= 6)
+                        fn1 = 6;
+                    else if (fn1 <= -1)
+                        fn1 = 0;
+                    switch (fn1)
+                    {
+                    case 0:
+                        zundun = true;
+                        break;
+                    case 1:
+                        cout << "存在修改值:";
+                        cin >> add;
+                        player[number].seve += add;
+                        break;
+                    case 2:
+                        cout << "影響修改值:";
+                        cin >> add;
+                        player[number].inshin += add;
+                        break;
+                    case 3:
+                        cout << "錨定修改值:";
+                        cin >> add;
+                        player[number].monden += add;
+                        break;
+                    case 4:
+                        cout << "理解修改值:";
+                        cin >> add;
+                        player[number].lewgue += add;
+                        break;
+                    case 5:
+                        cout << "觀測修改值:";
+                        cin >> add;
+                        player[number].see += add;
+                        break;
+                    case 6:
+                        cout << "理智修改值:";
+                        cin >> add;
+                        player[number].san += add;
+                        break;
+                    }
+                    if (fn1 != 0)
+                    {
+                        cout << "是否繼續修改數值[Y/N]:";
+                        cin >> ch;
+                        if (ch == 'y' || ch == 'Y')
+                        {
+                            zundun = false;
+                        }
+                        else
+                        {
+                            zundun = true;
+                        }
+                    }
                 }
-                if (fn1 != 0) 
+                if (player[number].move != 0)
                 {
-                    cout << "是否繼續修改數值[Y/N]:";
+                    cout << "是否攻擊玩家[Y/N]:";
                     cin >> ch;
                     if (ch == 'y' || ch == 'Y')
                     {
-                        zundun = false;
-                    }
-                    else
-                    {
-                        zundun = true;
+                        for (fn1 = false; fn1 != true;)
+                        {
+                            cout << "輸入玩家編號為自身編號，取消攻擊" << endl << "選擇玩家編號:NO._\b";
+                            cin >> other_number;
+                            if (other_number == number)
+                            {
+                                fn1 = true;
+                                cout << "無法攻擊自己，攻擊失敗。";
+                            }
+                            cout << "選擇攻擊力判定" << endl << "1.影響值+觀測值" << endl << "2.理解值+觀測值" << endl << "3.理解值+影響值" << endl << "選擇攻擊力判定方式:_\b";
+                            cin >> mod;
+                            cout << "選擇攻擊對方數值" << endl << "1.存在值" << endl << "2.影響值" << endl << "3.理解值" << endl << "4.觀測值" << endl << "選擇攻擊判定數值:_\b";
+                            cin >> add;
+                            cout << "是否持有無視防禦[Y/N]:_\b";
+                            cin >> ch;
+                            if (other_number != number && other_number <= player_count && other_number >= 1)
+                            {
+                                switch (mod)
+                                {
+                                case 1:
+                                    atk_n = atk_1(player[number].inshin, player[number].see);
+                                    break;
+                                case 2:
+                                    atk_n = atk_1(player[number].lewgue, player[number].see);
+                                    break;
+                                case 3:
+                                    atk_n = atk_1(player[number].inshin, player[number].lewgue);
+                                    break;
+                                }
+                                if (ch == 'y' || ch == 'Y')
+                                    def_n = def(player[other_number].monden, player[other_number].zundun);
+                                else
+                                    def_n = 0;
+                                atk_dem = atk_int(atk_n, def_n);
+                                if (atk_dem <= 0 || player[other_number].winner == true)
+                                {
+                                    cout << "攻擊失敗" << endl;
+                                    fn1 = true;
+                                }
+                                else
+                                {
+                                    cout << "發動攻擊" << endl << "對" << player[other_number].name << "造成傷害:" << -atk_dem << endl;
+                                    switch (add)
+                                    {
+                                    case 1:
+                                        player[other_number].seve -= atk_dem;
+                                        break;
+                                    case 2:
+                                        player[other_number].inshin -= atk_dem;
+                                        break;
+                                    case 3:
+                                        player[other_number].lewgue -= atk_dem;
+                                        break;
+                                    case 4:
+                                        player[other_number].see -= atk_dem;
+                                        break;
+                                    }
+                                    fn1 = true;
+                                }
+                            }
+                            else if (other_number == number)
+                            {
+                                fn1 = true;
+                            }
+                            else
+                                cout << "查無此人，請重新輸入" << endl;
+                        }
                     }
                 }
             }
-            cout << "是否攻擊玩家[Y/N]:";
-            cin >> ch;
-            if (ch == 'y' || ch == 'Y')
+            else if (player[number].winner)
             {
-                for (fn1 = false; fn1 != true;)
-                {
-                    cout << "輸入玩家編號為自身編號，取消攻擊" << endl << "選擇玩家編號:NO._\b";
-                    cin >> other_number;
-                    if(other_number == number)
-					{
-                    	fn1 = true;
-                    	cout << "無法攻擊自己，攻擊失敗。";
-					}
-					else if(player[number].move != 0)
-					{
-                 	   cout << "選擇攻擊力判定" << endl << "1.影響值+觀測值" << endl << "2.理解值+觀測值" << endl << "3.理解值+影響值" << endl << "選擇攻擊力判定方式:_\b";
-                 	   cin >> mod;
-                 	   cout << "是否持有無視防禦[Y/N]:_\b";
-                 	   cin >> ch;
-                    	if (other_number != number && other_number <= player_count && other_number >= 1)
-                    	{
-                    		switch(mod)
-                    		{
-                    			case 1:
-                    				atk_n = atk_1(player[number].inshin, player[number].see);
-                    				break;
-                    			case 2:
-                    				atk_n = atk_1(player[number].lewgue, player[number].see);
-                    				break;
-                    			case 3:
-                    				atk_n = atk_1(player[number].inshin, player[number].lewgue);
-                    				break;
-							}
-							if(ch == 'y' || ch == 'Y')
-							def_n = def(player[other_number].monden, player[other_number].zundun);
-							else
-							def_n = 0;
-                        	atk_dem = atk_int(atk_n, def_n);
-                        	player[other_number].seve -= atk_dem;
-                        	if (atk_dem <= 0)
-                        	{
-                            	cout << "攻擊失敗" << endl;
-                            	fn1 = true;
-                        	}
-                        	else
-                        	{
-                            	cout << "發動攻擊" << endl << "對" << player[other_number].name << "造成傷害:" <<-atk_dem << endl;
-                            	fn1 = true;
-                        	}
-                    	}
-                    	else if (other_number == number)
-                    	{
-                        	fn1 = true;
-                    	}
-                    	else
-                        	cout << "查無此人，請重新輸入" << endl;
-                    } 
-                }
+                cout << "已獲勝" << endl;
             }
         }
-        else 
+        else
         {
             cout << "存在狀態:消失" << endl;
         }
@@ -328,15 +351,38 @@ int main()
             cout << player[number].name << "被世界厭惡而排斥到虛空中";
             Sleep(1000);
         }
-        cout << "剩餘輪次:" << turn - 1;
-        if(run == player_count)
+        if (run == player_count)
         {
-			turn--;
-			run = 1;
-		} 
-		player[number].move += 1;
-		run++;
+            turn--;
+            run = 0;
+        }
+        player[number].move += 1;
+        if (player[number].winner == false || player[number].live == 1)
+        {
+            run++;
+        }
         Sleep(2000);
         cls;
+        if(player[number].san <= -100 || player[number].lewgue >= 100 || player[number].inshin >= 100 || turn == 0)
+        { 
+            if (turn != 0)
+            {
+                player[number].winner = true;
+                win = true;
+            }
+            if (turn == 0)
+            {
+                game_over = true;
+            }
+        }
+        if (player[number].monden <= -100 || player[number].seve >= 100 || player[number].see >= 100)
+        {
+            player[number].winner = true;
+        }
+        if (win == true || game_over == true)
+        {
+            out = true;
+        }
     }
+    cout << "遊戲結束";
 }
