@@ -82,7 +82,7 @@ void menu::Menu()
 
 void menu::atk_int()
 {
-	int choose = 1;
+	bool choose = true;
 	while (choose)
 	{
 		if (Windows::input_r())
@@ -94,11 +94,11 @@ void menu::atk_int()
 				{
 				case 0x0000C901:
 					atk_value = Player[now_player].affect + Player[now_player].observatuon;
-					choose = 0;
+					choose = false;
 					break;
 				case 0x0000C902:
 					atk_value = Player[now_player].understand + Player[now_player].observatuon;
-					choose = 0;
+					choose = false;
 					break;
 				case 0x0000C903:
 					atk_value = Player[now_player].affect + Player[now_player].understand;
@@ -106,7 +106,7 @@ void menu::atk_int()
 					choose = 0;
 				case 0x0000001B:
 					atk_value = 0;
-					choose = 0;
+					choose = false;
 					break;
 				};
 			}
