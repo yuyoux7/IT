@@ -4,7 +4,7 @@ int main()
 {
 	Windows Windows(1280, 720, 1 | 8);
 	menu Menu{};
-	Windows.Title("®à¹C");					//±MÃD
+	Windows.Title("æ¡ŒéŠ");					//å°ˆé¡Œ
 	setbkcolor(0xFFFFFF);
 	cleardevice();
 	Menu.Menu();
