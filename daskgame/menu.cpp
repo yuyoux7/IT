@@ -17,13 +17,13 @@ void menu::Menu()
 			input = Windows::INPUT_READ();
 			switch (input.message)
 			{
-			case 0x0000020A:							//·Æ¹«ºu½ü
+			case 0x0000020A:							//æ»‘é¼ æ»¾è¼ª
 				list += 1;
 				break;
-			case 0x00000202:							//·Æ¹«¥ªÁä
+			case 0x00000202:							//æ»‘é¼ å·¦éµ
 				list = 0;
 				break;
-			case 0x00000205:							//·Æ¹«¥kÁä
+			case 0x00000205:							//æ»‘é¼ å³éµ
 				list = 0x1B;
 				break;
 			case 0x00000100:
@@ -88,7 +88,7 @@ void menu::atk_int()
 		if (Windows::input_r())
 		{
 			input = Windows::INPUT_READ();
-			if (input.message == 0x00000202)			//·Æ¹«¥ªÁä
+			if (input.message == 0x00000202)			//æ»‘é¼ å·¦éµ
 			{
 				switch (/*button.button(0, 0, list)*/0xC901)
 				{
@@ -146,7 +146,7 @@ void menu::scenes_home()
 		if (Windows::input_r())
 		{
 			input = Windows::INPUT_READ();
-			if (input.message == 0x00000202)			//·Æ¹«¥ªÁä
+			if (input.message == 0x00000202)			//æ»‘é¼ å·¦éµ
 			{
 				switch (button.button_value(0xC402, 1))
 				{
