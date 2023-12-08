@@ -17,3 +17,7 @@ int main(void)
    cout << user.GET_RAND();
 }
 ```
+### default.h功能說明
+```bash
+GET_RAND(int _nm);
+```
