@@ -39,3 +39,8 @@ void WORLD_BG_RGB_SET_CMD(int __Forg_Color__ = REST_FORG_COLOR, int __Back_Color
 //#define BLACK 0x00
 //僅限於在編譯終端時使用
 ```
+MOVE_GOTO_SET_CMD();
+```bash
+void MOVE_GOTO_SET_CMD(int __x__, int __y__);
+//將終端的光標移動至設定的位置
+```
