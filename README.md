@@ -5,5 +5,5 @@
 一個C++的懶人開頭檔
 # 如何使用default.h
 將它下載放置與您的專項同一個資料夾中
-在您的檔案中加入#include "default.h"
+在您的檔案中加入'#include "default.h"'
 即可輕鬆使用
