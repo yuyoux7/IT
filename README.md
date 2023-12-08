@@ -13,6 +13,7 @@
 often_use user;
 int main(void)
 {
+   user.
    cout << user.get_rand();
 }
 ```
