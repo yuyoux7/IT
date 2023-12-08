@@ -18,6 +18,9 @@ int main(void)
 }
 ```
 ### default.h功能說明
+GET_RAND();
 ```bash
-GET_RAND(int _nm);
+int GET_RAND(int __Bailiwick__ = 0);
+//得到一個由0開始向上的隨機的數值
+//Bailiwick可以限定上限值
 ```
