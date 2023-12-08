@@ -10,4 +10,9 @@
 ### defailt.h調用演示
 ```bash
 #include "default.h"
+often_use user;
+int main(void)
+{
+   cout << user.get_rand();
+}
 ```
