@@ -14,7 +14,7 @@ often_use user;
 int main(void)
 {
    user.WORLD_BG_RGB_SET_CMD(RED);
-   cout << user.GET_RAND();
+   cout << user.GET_RAND() ;
 }
 ```
 ### default.h功能說明
