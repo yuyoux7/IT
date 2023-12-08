@@ -13,7 +13,7 @@
 often_use user;
 int main(void)
 {
-   user.WORLD_BG_RGB_SET_CMD(11);
+   user.WORLD_BG_RGB_SET_CMD(RED);
    cout << user.GET_RAND();
 }
 ```
