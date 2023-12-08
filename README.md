@@ -24,3 +24,12 @@ int GET_RAND(int __Bailiwick__ = 0);
 //得到一個由0開始向上的隨機的數值
 //Bailiwick可以限定上限值
 ```
+WORLD_BG_RGB_SET_CMD();
+```bash
+void WORLD_BG_RGB_SET_CMD(int __Forg_Color__ = REST_FORG_COLOR, int __Back_Color__ = REST_BACK_COLOR);
+//設定文字及文字背景的顏色
+//不傳入參數視為重置顏色
+//傳入值應為0~15之間的整數
+//有預定義的顏色可直接使用
+//僅限於在編譯終端時使用
+```
