@@ -31,5 +31,11 @@ void WORLD_BG_RGB_SET_CMD(int __Forg_Color__ = REST_FORG_COLOR, int __Back_Color
 //不傳入參數視為重置顏色
 //傳入值應為0~15之間的整數
 //有預定義的顏色可直接使用
+//#define WHITE 0x0F
+//#define YELLOW 0x0E
+//#define RED 0x0C
+//#define GREED 0x0A
+//#define BLUE 0x09
+//#define BLACK 0x00
 //僅限於在編譯終端時使用
 ```
