@@ -7,7 +7,7 @@
 將它下載放置與您的專項同一個資料夾中
 在您的檔案中加入`#include "default.h"`
 即可輕鬆使用
-###defailt.h調用演示
+### defailt.h調用演示
 ```bash
 #include "default.h"
 ```
