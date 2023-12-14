@@ -30,6 +30,7 @@ public:
 	void atk_int();
 	void scenes_home();
 	void default_value(int a);
+	int rand_v(const int a);
 private:
 	ExMessage input;
 };

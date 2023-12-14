@@ -13,5 +13,4 @@ int Windows::Window_exit()
 void Windows::Title(const std::string& title)
 {
     ::SetWindowText(Window_size, title.c_str());
-    srand((unsigned)time(NULL));
 }

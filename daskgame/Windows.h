@@ -1,5 +1,6 @@
 #pragma once
 #include "GUI.h"
+using std::string;
 class Windows
 {
 public:

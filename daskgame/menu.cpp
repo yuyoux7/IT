@@ -1,15 +1,14 @@
 #include "menu.h"
-#include <iostream>
-#include <conio.h>
 Player_Data Player[10];
 Button button;
 int atk_value = NULL, now_player = NULL, list = 4;
 int player_count = NULL;
+bool game_end = false;
 void menu::Menu()
 {
 	int up_list = NULL;
 	scenes_home();
-	while (true)
+	while (!game_end)
 	{
 		if (Windows::input_r())
 		{
@@ -17,14 +16,8 @@ void menu::Menu()
 			input = Windows::INPUT_READ();
 			switch (input.message)
 			{
-			case 0x0000020A:							//ÊªëÈº†ÊªæËº™
-				list += 1;
-				break;
-			case 0x00000202:							//ÊªëÈº†Â∑¶Èçµ
+			case 0x00000202:							//∑∆π´•™¡‰
 				list = 0;
-				break;
-			case 0x00000205:							//ÊªëÈº†Âè≥Èçµ
-				list = 0x1B;
 				break;
 			case 0x00000100:
 				list = input.vkcode;
@@ -60,13 +53,6 @@ void menu::Menu()
 				Sleep(80);
 				cleardevice();
 				break;
-			case menu::scenes:
-				outtextxy(10, 20, "4");
-				settextcolor(0xFFFFFF);
-				scenes_home();
-				Sleep(80);
-				cleardevice();
-				break;
 			case 0x0000001B:
 				outtextxy(10, 20, "back");
 				settextcolor(0xFFFFFF);
@@ -82,23 +68,23 @@ void menu::Menu()
 
 void menu::atk_int()
 {
-	bool choose = true;
+	int choose = 1;
 	while (choose)
 	{
 		if (Windows::input_r())
 		{
 			input = Windows::INPUT_READ();
-			if (input.message == 0x00000202)			//ÊªëÈº†Â∑¶Èçµ
+			if (input.message == 0x00000202)			//∑∆π´•™¡‰
 			{
 				switch (/*button.button(0, 0, list)*/0xC901)
 				{
 				case 0x0000C901:
 					atk_value = Player[now_player].affect + Player[now_player].observatuon;
-					choose = false;
+					choose = 0;
 					break;
 				case 0x0000C902:
 					atk_value = Player[now_player].understand + Player[now_player].observatuon;
-					choose = false;
+					choose = 0;
 					break;
 				case 0x0000C903:
 					atk_value = Player[now_player].affect + Player[now_player].understand;
@@ -106,7 +92,7 @@ void menu::atk_int()
 					choose = 0;
 				case 0x0000001B:
 					atk_value = 0;
-					choose = false;
+					choose = 0;
 					break;
 				};
 			}
@@ -117,26 +103,52 @@ void menu::atk_int()
 
 std::string menu::input_string(int a)
 {
+	TCHAR text = NULL;
 	bool r = true;
+	int x = 20;
 	while (r)
 	{
 		if (Windows::input_r())
 		{
 			input = Windows::INPUT_READ();
-			if (input.message == 0x00000100)
-			{
-				Player[a].Name += input.vkcode;
-				std::cout << input.vkcode;
-			};
 			if (input.vkcode == 0x00000000D)
 			{
 				r = false;
+			}
+			else if (input.message == 0x00000100)
+			{
+				Player[a].Name += input.vkcode;
+				if (input.vkcode != 0x8)
+				{
+					text += input.vkcode;
+					outtextxy(x, 20, text);
+					text = NULL;
+					x += 15;
+				}
+				else
+				{
+					x -= 15;
+					if (x <= 20)
+					{
+						x = 20;
+					}
+					outtextxy(x, 20, "    ");
+				}
+				std::cout << input.vkcode;
 			}
 		}
 	}
 	return Player[a].Name;
 }
-
+/***********
+* char to TCHAR
+* char ^ 48 -> Ascii
+* TCHAR += char ^ 48;
+* TCHAR = NULL;
+************
+* string to char
+* char = string[number];
+***********/
 void menu::scenes_home()
 {
 	bool home = false;
@@ -146,7 +158,7 @@ void menu::scenes_home()
 		if (Windows::input_r())
 		{
 			input = Windows::INPUT_READ();
-			if (input.message == 0x00000202)			//ÊªëÈº†Â∑¶Èçµ
+			if (input.message == 0x00000202)			//∑∆π´•™¡‰
 			{
 				switch (button.button_value(0xC402, 1))
 				{
@@ -194,10 +206,33 @@ void menu::scenes_home()
 					for (run_for_int = player_count; run_for_int != 0; run_for_int--)
 					{
 						input_string(run_for_int);
+						std::cout << Player[run_for_int].Name;
 						//settextcolor(0xFFFFFF);
 					};
 				};
 			};
 		};
 	};
+}
+
+void menu::default_value(int a)
+{
+}
+
+int menu::rand_v(const int a)
+{
+	srand((unsigned)time(NULL));
+	if (a > 0)
+	{
+		return rand() % a;
+	}
+	else if (a == 0)
+	{
+
+		return rand();
+	}
+	else
+	{
+		return 0;
+	}
 }

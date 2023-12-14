@@ -4,8 +4,8 @@ int main()
 {
 	Windows Windows(1280, 720, 1 | 8);
 	menu Menu{};
-	Windows.Title("æ¡ŒéŠ");					//å°ˆé¡Œ
-	setbkcolor(0xFFFFFF);
+	Windows.Title("®à¹C");					//±MÃD
+	setbkcolor(0x1F1E33);
 	cleardevice();
 	Menu.Menu();
 	return Windows.Window_exit();
