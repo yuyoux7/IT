@@ -10,7 +10,7 @@ int main()
 	int y = Text_Read["Y_size"];
 	Windows Windows(x, y, 0 | 8);
 	menu Menu{};
-	Windows.Title("®à¹C");					//±MÃD
+	Windows.Title("æ¡ŒéŠ");					//å°ˆé¡Œ
 	setbkcolor(0x1F1E33);
 	cleardevice();
 	Menu.Menu();
