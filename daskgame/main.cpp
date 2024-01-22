@@ -2,7 +2,8 @@
 #include "Windows.h"
 int main()
 {
-	nlohmann::json Text_Read;
+	nlohmann::json Text_Read, Text_Write;
+	std::ofstream File_Write_Log("./Log/Log.json");
 	std::ifstream File_Raed("config.json");
 	File_Raed >> Text_Read;
 	File_Raed.close();
@@ -10,13 +11,16 @@ int main()
 	int y = Text_Read["Y_size"];
 	Windows Windows(x, y, 0 | 8);
 	menu Menu{};
-	Windows.Title("Ê°åÈÅä");					//Â∞àÈ°å
+	Windows.Title("Æ‡πC");					//±M√D
 	setbkcolor(0x1F1E33);
 	cleardevice();
 	Menu.Menu();
-	Menu.game_run_end();
+	Menu.game_run_end(x, y);
 	std::ofstream File_Write("config.json");
-	File_Write << Text_Read;
+	Text_Write["X_size"] = x;
+	Text_Write["Y_size"] = y;
+	File_Write << Text_Write;
 	File_Write.close();
-	return Windows.Window_exit();
+	File_Write_Log.close();
+	return 0;//Windows.Window_exit();
 }

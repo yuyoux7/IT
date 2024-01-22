@@ -45,4 +45,14 @@
       <Filter>標頭檔</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="1.ico">
+      <Filter>資源檔</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Board_Game1.rc">
+      <Filter>資源檔</Filter>
+    </ResourceCompile>
+  </ItemGroup>
 </Project>

@@ -4,7 +4,7 @@ using std::string;
 class Windows
 {
 public:
-	Windows(int x,int y,int flog);
+	Windows(int x,int y,int flog = NULL);
 	int Window_exit();
 	void Title(const std::string& title);
 	inline static bool input_r()

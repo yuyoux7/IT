@@ -1,126 +1,64 @@
 #include "Button.h"
-#include <iostream>
 #include <WTypesbase.h>
-int Button::button(int button_x_up, int button_y_up, int button_x_down, int button_y_down, int ip_x, int ip_y, int list)
+Button_ip Button_IP[List][Count];
+int Button::button(int ip_x, int ip_y, int list)
 {
-	if (button_x_up < ip_x && ip_x < button_x_down && button_y_up < ip_y && ip_y < button_y_down)
-	{
-		switch (list)
-		{
-		case Button::home:
-			break;
-		case Button::player_set:
-			break;
-		case Button::game_round:
-			break;
-		case Button::gamecard_set:
-			break;
-		case Button::atk_set:
-			break;
-		default:
-			break;
-		}
-	}
-	return 0;
-};
-int Button::button(int button_main, int ip_x, int ip_y, int list)
-{
-	if (button_round(button_main, ip_x, ip_y, list))
-	{
-		switch (list)
-		{
-		case Button::home:
-			return button_round(button_main);
-			break;
-		case Button::player_set:
-			button_round(button_main);
-			break;
-		case Button::game_round:
-			button_round(button_main);
-			break;
-		case Button::gamecard_set:
-			button_round(button_main);
-			break;
-		case Button::atk_set:
-			button_round(button_main);
-			break;
-		default:
-			break;
-		}
-	};
-	return 0;
-};
-int Button::button_value(int now_value, int value)
-{
-	return now_value + value;
-}
-int Button::button_round(int button_number, int __x__, int __y__, int list)
-{
-	int x_up = 0, y_up = 0, x_down = 0, y_down = 0;
+	nlohmann::json Text_Read;
+	std::ifstream File_Raed("config.json");
+	File_Raed >> Text_Read;
+	File_Raed.close();
+	int x = Text_Read["X_size"];
+	int y = Text_Read["Y_size"];
+	double r_x = x / static_cast<double>(1920);
+	double r_y = y / static_cast<double>(1080);
+	IMAGE up, down, start_unp;
 	switch (list)
 	{
 	case Button::home:
-		switch (button_number)
+		loadimage(&up, "./image/home/up.png");
+		Button_IP[list][0xA420].X_ip = up.getwidth() * r_x;
+		Button_IP[list][0xA420].Y_ip = up.getheight() * r_y;
+		Button_IP[list][0xA420].button_value = 0xA420;
+		loadimage(&down, "./image/home/down.png");
+		Button_IP[list][0xA430].X_ip = down.getwidth() * r_x;
+		Button_IP[list][0xA430].Y_ip = down.getheight() * r_y;
+		Button_IP[list][0xA430].button_value = 0xA430;
+		loadimage(&start_unp, "./image/home/startbutton.png");
+		Button_IP[list][0xA450].X_ip = start_unp.getwidth() * r_x;
+		Button_IP[list][0xA450].Y_ip = start_unp.getheight() * r_y;
+		Button_IP[list][0xA450].button_value = 0xA450;
+		if (ip_x > 1117 * r_x && ip_x < (1117 * r_x + Button_IP[list][0xA420].X_ip))
 		{
-		case 0:
-			return true;
-		default:
-			break;
+			if (ip_y > 619 * r_y && ip_y < (619 * r_y + Button_IP[list][0xA420].Y_ip))
+			{
+				return Button_IP[list][0xA420].button_value;
+			}
+		}
+		if (ip_x > 1151 * r_x && ip_x < (1151 * r_x + Button_IP[list][0xA430].X_ip))
+		{
+			if (ip_y > 659 * r_y && ip_y < (659 * r_y + Button_IP[list][0xA430].Y_ip))
+			{
+				return Button_IP[list][0xA430].button_value;
+			}
+		}
+		if (ip_x > 702 * r_x && ip_x < (702 * r_x + Button_IP[list][0xA450].X_ip))
+		{
+			if (ip_y > 780 * r_y && ip_y < (780 * r_y + Button_IP[list][0xA450].Y_ip))
+			{
+				return Button_IP[list][0xA450].button_value;
+			}
 		}
 		break;
 	case Button::player_set:
-		switch (button_number)
-		{
-		default:
-			break;
-		}
 		break;
 	case Button::game_round:
-		switch (button_number)
-		{
-		default:
-			break;
-		}
 		break;
 	case Button::gamecard_set:
-		switch (button_number)
-		{
-		default:
-			break;
-		}
 		break;
 	case Button::atk_set:
-		switch (button_number)
-		{
-		default:
-			break;
-		}
 		break;
-	default:
-		break;
-	}
-	return false;
-}
-int Button::button_round(int button_number)
-{
-	switch (button_number)
-	{
-	case 0:
-		return 1;
 	default:
 		break;
 	}
 	return 0;
 };
-char world_lib_char(const int ch)
-{
-	char ch_w;
-	ch_w = ch ^ 48;
-	return ch_w;
-}
-std::string world_lib_string(const int str)
-{
-	std::string str_w;
-	str_w += str;
-	return str_w;
-}

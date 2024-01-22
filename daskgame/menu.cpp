@@ -1,13 +1,29 @@
 #include "menu.h"
-Player_Data Player[10];
+Player_Data Player[11];
 Button button;
 int atk_value = NULL, now_player = NULL, list = 4, def_n = NULL;
 int player_count = NULL, Game_run = 20;
 bool game_end = false;
 void menu::Menu()
 {
+	nlohmann::json Text_Read;
+	std::ifstream File_Raed("config.json");
+	File_Raed >> Text_Read;
+	File_Raed.close();
 	int up_list = NULL;
-	scenes_home();
+	int x = Text_Read["X_size"];
+	int y = Text_Read["Y_size"];
+	loadimage(&number[0], "./image/number/0.jpg", 41 * static_cast<double>(x / static_cast <double>(1920)), 71 * static_cast<double>(y / static_cast <double>(1080)), true);
+	loadimage(&number[1], "./image/number/1.jpg", 41 * static_cast<double>(x / static_cast <double>(1920)), 71 * static_cast<double>(y / static_cast <double>(1080)), true);
+	loadimage(&number[2], "./image/number/2.jpg", 41 * static_cast<double>(x / static_cast <double>(1920)), 71 * static_cast<double>(y / static_cast <double>(1080)), true);
+	loadimage(&number[3], "./image/number/3.jpg", 41 * static_cast<double>(x / static_cast <double>(1920)), 71 * static_cast<double>(y / static_cast <double>(1080)), true);
+	loadimage(&number[4], "./image/number/4.jpg", 41 * static_cast<double>(x / static_cast <double>(1920)), 71 * static_cast<double>(y / static_cast <double>(1080)), true);
+	loadimage(&number[5], "./image/number/5.jpg", 41 * static_cast<double>(x / static_cast <double>(1920)), 71 * static_cast<double>(y / static_cast <double>(1080)), true);
+	loadimage(&number[6], "./image/number/6.jpg", 41 * static_cast<double>(x / static_cast <double>(1920)), 71 * static_cast<double>(y / static_cast <double>(1080)), true);
+	loadimage(&number[7], "./image/number/7.jpg", 41 * static_cast<double>(x / static_cast <double>(1920)), 71 * static_cast<double>(y / static_cast <double>(1080)), true);
+	loadimage(&number[8], "./image/number/8.jpg", 41 * static_cast<double>(x / static_cast <double>(1920)), 71 * static_cast<double>(y / static_cast <double>(1080)), true);
+	loadimage(&number[9], "./image/number/9.jpg", 41 * static_cast<double>(x / static_cast <double>(1920)), 71 * static_cast<double>(y / static_cast <double>(1080)), true);
+	scenes_home(x, y);
 	while (!game_end)
 	{
 		if (Windows::input_r())
@@ -60,7 +76,7 @@ void menu::Menu()
 				Sleep(80);
 				break;
 			default:
-				player_run_scenes();
+				player_run_scenes(x);
 				if (Game_run > 0)
 				{
 					Game_run -= 1;
@@ -74,7 +90,6 @@ void menu::Menu()
 		}
 	}
 }
-
 void menu::atk_int()
 {
 	bool choose = true;
@@ -85,7 +100,7 @@ void menu::atk_int()
 			input = Windows::INPUT_READ();
 			if (input.message == 0x00000202)			//·Æ¹«¥ªÁä
 			{
-				switch (button.button(0x901 | 0x902 | 0x903, 0, 0, 4))
+				switch (button.button(0, 0, 4))
 				{
 				case 0x0000C901:
 					atk_value = Player[now_player].affect + Player[now_player].observatuon;
@@ -109,7 +124,6 @@ void menu::atk_int()
 	}
 	list = 4;
 }
-
 std::string menu::input_string(int a)
 {
 	TCHAR text = NULL;
@@ -174,88 +188,120 @@ std::string menu::input_string(int a)
 * string to char
 * char = string[number];
 ***********/
-void menu::scenes_home()
+void menu::scenes_home(int x, int y)
 {
 	TCHAR T = NULL;
 	bool home = false, oo = true;
-	int run_for_int = NULL;
+	int run_for_int = 2;
+	IMAGE bg, up, down, start_unp, start_p, player_c;
+	double r_x = x / static_cast<double>(1920);
+	double r_y = y / static_cast<double>(1080);
+	int p_x, p_y;
+	loadimage(&bg, "./image/home/bg_.png", x, y, true);
+	loadimage(&up, "./image/home/up.png");
+	p_x = up.getwidth() * r_x;
+	p_y = up.getheight() * r_y;
+	loadimage(&up, "./image/home/up.png", p_x, p_y, true);
+	loadimage(&down, "./image/home/down.png");
+	p_x = down.getwidth() * r_x;
+	p_y = down.getheight() * r_y;
+	loadimage(&down, "./image/home/down.png", p_x, p_y, true);
+	loadimage(&start_unp, "./image/home/startbutton.png");
+	p_x = start_unp.getwidth() * r_x;
+	p_y = start_unp.getheight() * r_y;
+	loadimage(&start_unp, "./image/home/startbutton.png", p_x, p_y, true);
+	loadimage(&start_p, "./image/home/startbutton_down.png");
+	p_x = start_p.getwidth() * r_x;
+	p_y = start_p.getheight() * r_y;
+	loadimage(&start_p, "./image/home/startbutton_down.png", p_x, p_y, true);
+	loadimage(&player_c, "./image/home/playercount.png");
+	p_x = player_c.getwidth() * r_x;
+	p_y = player_c.getheight() * r_y;
+	loadimage(&player_c, "./image/home/playercount.png", p_x, p_y, true);
+	putimage(0, 0, &bg);
+	putimage(1117 * r_x, 619 * r_y, &up);
+	putimage(1151 * r_x, 659 * r_y, &down);
+	putimage(782 * r_x, 622 * r_y, &player_c);
+	putimage(952 * r_x, 630 * r_y, &number[2]);
+	putimage(702 * r_x, 780 * r_y, &start_unp);
 	while (!home)
 	{
 		if (Windows::input_r())
 		{
 			input = Windows::INPUT_READ();
-			if (input.message == 0x00000202)			//·Æ¹«¥ªÁä
+			if (input.message == 0x00000201)			//·Æ¹«¥ªÁä
 			{
-				if (button.button(0, 0, 0, 0))
+				if (button.button(input.x, input.y, 0) == 0xA420)
 				{
-					switch (button.button_value(0xC402, 1))
+					while (input.message != 0x00000202)
 					{
-					case 0x0000C402:
-						player_count = 2;
-						home = true;
-						break;
-					case 0x0000C403:
-						player_count = 3;
-						home = true;
-						break;
-					case 0x0000C404:
-						player_count = 4;
-						home = true;
-						break;
-					case 0x0000C405:
-						player_count = 5;
-						home = true;
-						break;
-					case 0x0000C406:
-						player_count = 6;
-						home = true;
-						break;
-					case 0x0000C407:
-						player_count = 7;
-						home = true;
-						break;
-					case 0x0000C408:
-						player_count = 8;
-						home = true;
-						break;
-					case 0x0000C409:
-						player_count = 9;
-						home = true;
-						break;
-					case 0x0000C410:
-						player_count = 10;
-						home = true;
-						break;
-					default:
-						break;
-					};
-					if (player_count != 0)
-					{
-						for (run_for_int = player_count; run_for_int != 0; run_for_int--)
+						if (Windows::input_r())
 						{
-							Player[run_for_int].Name_NUMBER[0] = rand_v(39, 1);
-							Player[run_for_int].Name_NUMBER[1] = rand_v(39, 41);
-							Player[run_for_int].Name += (Player_NAME_RAND(Player[run_for_int].Name_NUMBER[0]) + Player_NAME_RAND(Player[run_for_int].Name_NUMBER[1]));
-							std::cout << Player[run_for_int].Name << std::endl;
-							//input_string(run_for_int);
-							//std::cout << std::endl << Player[run_for_int].Name;
-							//cleardevice();
-							//settextcolor(0xFFFFFF);
-							//Sleep(10000);
-							//for (auto i = 0; i < 5; i++)
-							//{
-							//	T = Player[run_for_int].Name[i];
-							//	outtextxy(20 + (i * 15), 70, T);
-							//	T = NULL;
-							//};
+							input = Windows::INPUT_READ();
+						}
+					}
+					if (run_for_int < 10)
+					{
+						run_for_int++;
+					}
+				}
+				else if (button.button(input.x, input.y, 0) == 0xA430)
+				{
+					while (input.message != 0x00000202)
+					{
+						if (Windows::input_r())
+						{
+							input = Windows::INPUT_READ();
+						}
+					}
+					if (run_for_int > 2)
+					{
+						run_for_int--;
+					}
+				}
+				else if (button.button(input.x, input.y, 0) == 0xA450)
+				{
+					putimage(0, 0, &bg);
+					putimage(1117 * r_x, 619 * r_y, &up);
+					putimage(1151 * r_x, 659 * r_y, &down);
+					putimage(782 * r_x, 622 * r_y, &player_c);
+					if (run_for_int != 10)  putimage(952 * r_x, 630 * r_y, &number[run_for_int]);
+					else { putimage(952 * r_x, 630 * r_y, &number[1]); putimage(952 * r_x + 41 * static_cast<double>(x / static_cast <double>(1920)), 630 * r_y, &number[0]); }
+					putimage(702 * r_x, 800 * r_y, &start_p);
+					Sleep(80);
+					while (input.message != 0x00000202)
+					{
+						if (Windows::input_r())
+						{
+							input = Windows::INPUT_READ();
+						}
+					}
+					putimage(702 * r_x, 780 * r_y, &start_unp);
+					if (button.button(input.x, input.y, 0) == 0xA450)
+					{
+						player_count = run_for_int;
+						home = !home;
+						cleardevice();
+						if (player_count != 0)
+						{
+							for (; run_for_int != 0; run_for_int--)
+							{
+								Player[run_for_int].Name_NUMBER[0] = rand_v(39, 1);
+								Player[run_for_int].Name_NUMBER[1] = rand_v(39, 41);
+								Player[run_for_int].Name += (Player_NAME_RAND(Player[run_for_int].Name_NUMBER[0]) + Player_NAME_RAND(Player[run_for_int].Name_NUMBER[1]));
+								std::cout << Player[run_for_int].Name << std::endl;
+							};
 						};
 					};
 				};
+				putimage(782 * r_x, 622 * r_y, &player_c);
+				if (run_for_int != 10)  putimage(952 * r_x, 630 * r_y, &number[run_for_int]);
+				else { putimage(952 * r_x, 630 * r_y, &number[1]); putimage(952 * r_x + 41 * static_cast<double>(x / static_cast <double>(1920)), 630 * r_y, &number[0]); }
 			};
 		};
 	};
+	cleardevice();
 }
-
 void menu::default_value(int a, int b)
 {
 	Player[a].understand = b * 2;
@@ -299,7 +345,6 @@ void menu::default_value(int a, int b)
 		break;
 	}
 }
-
 int menu::rand_v(const int a, const int b)
 {
 	srand((unsigned)time(NULL));
@@ -317,7 +362,6 @@ int menu::rand_v(const int a, const int b)
 		return 0;
 	}
 }
-
 std::string menu::Player_NAME_RAND(const int num)
 {
 	std::string pnm;
@@ -568,23 +612,23 @@ std::string menu::Player_NAME_RAND(const int num)
 	}
 	return pnm;
 }
-void menu::player_run_scenes()
+void menu::player_run_scenes(int x)
 {
 	TCHAR chh = NULL;
-	outtextxy(1200, 40, "³Ñ");
-	outtextxy(1200, 60, "¾l");
-	outtextxy(1200, 80, "½ü");
-	outtextxy(1200, 100, "¦¸");
-	outtextxy(1207, 120, ":");
+	outtextxy(x - 80, 40, "³Ñ");
+	outtextxy(x - 80, 60, "¾l");
+	outtextxy(x - 80, 80, "½ü");
+	outtextxy(x - 80, 100, "¦¸");
+	outtextxy(x - 77, 120, ":");
 	chh = Game_run / 10 + 48;
-	outtextxy(1200, 140, chh);
+	outtextxy(x - 80, 140, chh);
 	chh = Game_run % 10 + 48;
-	outtextxy(1210, 140, chh);
+	outtextxy(x - 70, 140, chh);
 }
-void menu::game_run_end()
+void menu::game_run_end(int a, int b)
 {
 	cleardevice();
-	outtextxy(600, 360, "Game End");
+	outtextxy(a / 2 - 40, b / 2, "Game End");
 	Sleep(10000);
 	closegraph();
 };

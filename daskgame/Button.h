@@ -1,5 +1,15 @@
 #pragma once
 #include <iostream>
+#include "GUI.h"
+#define List 6
+#define Count 0xFFFF
+struct Button_ip
+{
+	int X_ip;
+	int Y_ip;
+	int button_value;
+	std::string fn;
+};
 class Button
 {
 	enum button_list
@@ -11,12 +21,6 @@ class Button
 		atk_set
 	};
 public:
-	int button(int button_x_up, int button_y_up, int button_x_down, int button_y_down, int ip_x, int ip_y, int list);
-	int button(int button_main, int ip_x, int ip_y, int list);
-	int button_value(int now_value, int value);
-	int button_round(int button_number, int __x__, int __y__, int list);
-	int button_round(int button_number);
+	int button(int ip_x, int ip_y, int list);
 private:
 };
-char world_lib_char(const int ch);
-std::string world_lib_string(const int str);

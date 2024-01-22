@@ -29,12 +29,13 @@ public:
 	void Menu();
 	std::string input_string(int a);
 	void atk_int();
-	void scenes_home();
+	void scenes_home(int x, int y);
 	void default_value(int a, int b);
 	int rand_v(const int a = 0, const int b = 0);
 	std::string Player_NAME_RAND(const int num);
-	void player_run_scenes();
-	void game_run_end();
+	void player_run_scenes(int x);
+	void game_run_end(int a, int b);
 private:
 	ExMessage input;
+	IMAGE number[11];
 };
