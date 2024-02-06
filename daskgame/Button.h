@@ -23,4 +23,5 @@ class Button
 public:
 	int button(int ip_x, int ip_y, int list);
 private:
+	IMAGE image[2000];
 };

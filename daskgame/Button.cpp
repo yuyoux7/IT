@@ -1,11 +1,13 @@
 #include "Button.h"
-#include <WTypesbase.h>
 Button_ip Button_IP[List][Count];
 int Button::button(int ip_x, int ip_y, int list)
 {
-	nlohmann::json Text_Read;
+	nlohmann::json Text_Read, set;
 	std::ifstream File_Raed("config.json");
+	std::ifstream set_file("image_set.json");
 	File_Raed >> Text_Read;
+	set_file >> set;
+	set_file.close();
 	File_Raed.close();
 	int x = Text_Read["X_size"];
 	int y = Text_Read["Y_size"];
@@ -15,15 +17,15 @@ int Button::button(int ip_x, int ip_y, int list)
 	switch (list)
 	{
 	case Button::home:
-		loadimage(&up, "./image/home/up.png");
+		loadimage(&up, static_cast<std::string>(set["home"]["up_button"]).data());
 		Button_IP[list][0xA420].X_ip = up.getwidth() * r_x;
 		Button_IP[list][0xA420].Y_ip = up.getheight() * r_y;
 		Button_IP[list][0xA420].button_value = 0xA420;
-		loadimage(&down, "./image/home/down.png");
+		loadimage(&down, static_cast<std::string>(set["home"]["down_button"]).data());
 		Button_IP[list][0xA430].X_ip = down.getwidth() * r_x;
 		Button_IP[list][0xA430].Y_ip = down.getheight() * r_y;
 		Button_IP[list][0xA430].button_value = 0xA430;
-		loadimage(&start_unp, "./image/home/startbutton.png");
+		loadimage(&start_unp, static_cast<std::string>(set["home"]["start_button_no_push"]).data());
 		Button_IP[list][0xA450].X_ip = start_unp.getwidth() * r_x;
 		Button_IP[list][0xA450].Y_ip = start_unp.getheight() * r_y;
 		Button_IP[list][0xA450].button_value = 0xA450;
@@ -50,6 +52,42 @@ int Button::button(int ip_x, int ip_y, int list)
 		}
 		break;
 	case Button::player_set:
+		loadimage(&image[1], static_cast<std::string>(set["player_set"]["race"]["people"]).data());
+		Button_IP[player_set][0xA510].X_ip = image[1].getwidth() * r_x;
+		Button_IP[player_set][0xA510].Y_ip = image[1].getheight() * r_y;
+		Button_IP[player_set][0xA510].button_value = 0xA510;
+		loadimage(&image[2], static_cast<std::string>(set["player_set"]["race"]["god"]).data());
+		Button_IP[player_set][0xA520].X_ip = image[2].getwidth() * r_x;
+		Button_IP[player_set][0xA520].Y_ip = image[2].getheight() * r_y;
+		Button_IP[player_set][0xA520].button_value = 0xA520;
+		loadimage(&image[3], static_cast<std::string>(set["player_set"]["race"]["monster"]).data());
+		Button_IP[player_set][0xA530].X_ip = image[3].getwidth() * r_x;
+		Button_IP[player_set][0xA530].Y_ip = image[3].getheight() * r_y;
+		Button_IP[player_set][0xA530].button_value = 0xA530;
+		loadimage(&image[4], static_cast<std::string>(set["player_set"]["race"]["out_people"]).data());
+		Button_IP[player_set][0xA540].X_ip = image[4].getwidth() * r_x;
+		Button_IP[player_set][0xA540].Y_ip = image[4].getheight() * r_y;
+		Button_IP[player_set][0xA540].button_value = 0xA540;
+		loadimage(&image[5], static_cast<std::string>(set["player_set"]["race"]["thinking_people"]).data());
+		Button_IP[player_set][0xA550].X_ip = image[5].getwidth() * r_x;
+		Button_IP[player_set][0xA550].Y_ip = image[5].getheight() * r_y;
+		Button_IP[player_set][0xA550].button_value = 0xA550;
+		loadimage(&image[6], static_cast<std::string>(set["player_set"]["race"]["elf"]).data());
+		Button_IP[player_set][0xA560].X_ip = image[6].getwidth() * r_x;
+		Button_IP[player_set][0xA560].Y_ip = image[6].getheight() * r_y;
+		Button_IP[player_set][0xA560].button_value = 0xA560;
+		loadimage(&image[7], static_cast<std::string>(set["player_set"]["race"]["bug"]).data());
+		Button_IP[player_set][0xA570].X_ip = image[7].getwidth() * r_x;
+		Button_IP[player_set][0xA570].Y_ip = image[7].getheight() * r_y;
+		Button_IP[player_set][0xA570].button_value = 0xA570;
+		loadimage(&image[8], static_cast<std::string>(set["player_set"]["race"]["no_save_monster"]).data());
+		Button_IP[player_set][0xA580].X_ip = image[8].getwidth() * r_x;
+		Button_IP[player_set][0xA580].Y_ip = image[8].getheight() * r_y;
+		Button_IP[player_set][0xA580].button_value = 0xA580;
+		loadimage(&image[0], static_cast<std::string>(set["player_set"]["next"]).data());
+		Button_IP[player_set][0xA500].X_ip = image[0].getwidth() * r_x;
+		Button_IP[player_set][0xA500].Y_ip = image[0].getheight() * r_y;
+		Button_IP[player_set][0xA500].button_value = 0xA500;
 		break;
 	case Button::game_round:
 		break;

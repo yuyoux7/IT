@@ -4,25 +4,31 @@ Button button;
 int atk_value = NULL, now_player = NULL, list = 4, def_n = NULL;
 int player_count = NULL, Game_run = 20;
 bool game_end = false;
+nlohmann::json Image_file;
 void menu::Menu()
 {
 	nlohmann::json Text_Read;
 	std::ifstream File_Raed("config.json");
+	std::ifstream image_file("image_set.json");
+	image_file >> Image_file;
 	File_Raed >> Text_Read;
 	File_Raed.close();
+	image_file.close();
 	int up_list = NULL;
 	int x = Text_Read["X_size"];
 	int y = Text_Read["Y_size"];
-	loadimage(&number[0], "./image/number/0.jpg", 41 * static_cast<double>(x / static_cast <double>(1920)), 71 * static_cast<double>(y / static_cast <double>(1080)), true);
-	loadimage(&number[1], "./image/number/1.jpg", 41 * static_cast<double>(x / static_cast <double>(1920)), 71 * static_cast<double>(y / static_cast <double>(1080)), true);
-	loadimage(&number[2], "./image/number/2.jpg", 41 * static_cast<double>(x / static_cast <double>(1920)), 71 * static_cast<double>(y / static_cast <double>(1080)), true);
-	loadimage(&number[3], "./image/number/3.jpg", 41 * static_cast<double>(x / static_cast <double>(1920)), 71 * static_cast<double>(y / static_cast <double>(1080)), true);
-	loadimage(&number[4], "./image/number/4.jpg", 41 * static_cast<double>(x / static_cast <double>(1920)), 71 * static_cast<double>(y / static_cast <double>(1080)), true);
-	loadimage(&number[5], "./image/number/5.jpg", 41 * static_cast<double>(x / static_cast <double>(1920)), 71 * static_cast<double>(y / static_cast <double>(1080)), true);
-	loadimage(&number[6], "./image/number/6.jpg", 41 * static_cast<double>(x / static_cast <double>(1920)), 71 * static_cast<double>(y / static_cast <double>(1080)), true);
-	loadimage(&number[7], "./image/number/7.jpg", 41 * static_cast<double>(x / static_cast <double>(1920)), 71 * static_cast<double>(y / static_cast <double>(1080)), true);
-	loadimage(&number[8], "./image/number/8.jpg", 41 * static_cast<double>(x / static_cast <double>(1920)), 71 * static_cast<double>(y / static_cast <double>(1080)), true);
-	loadimage(&number[9], "./image/number/9.jpg", 41 * static_cast<double>(x / static_cast <double>(1920)), 71 * static_cast<double>(y / static_cast <double>(1080)), true);
+	int k_x = 41 * static_cast<double>(x / static_cast <double>(1920));
+	int k_y = 71 * static_cast<double>(y / static_cast <double>(1080));
+	loadimage(&number[0], static_cast<std::string>(Image_file["number"]["number_0"]).data(), k_x, k_y, true);
+	loadimage(&number[1], static_cast<std::string>(Image_file["number"]["number_1"]).data(), k_x, k_y, true);
+	loadimage(&number[2], static_cast<std::string>(Image_file["number"]["number_2"]).data(), k_x, k_y, true);
+	loadimage(&number[3], static_cast<std::string>(Image_file["number"]["number_3"]).data(), k_x, k_y, true);
+	loadimage(&number[4], static_cast<std::string>(Image_file["number"]["number_4"]).data(), k_x, k_y, true);
+	loadimage(&number[5], static_cast<std::string>(Image_file["number"]["number_5"]).data(), k_x, k_y, true);
+	loadimage(&number[6], static_cast<std::string>(Image_file["number"]["number_6"]).data(), k_x, k_y, true);
+	loadimage(&number[7], static_cast<std::string>(Image_file["number"]["number_7"]).data(), k_x, k_y, true);
+	loadimage(&number[8], static_cast<std::string>(Image_file["number"]["number_8"]).data(), k_x, k_y, true);
+	loadimage(&number[9], static_cast<std::string>(Image_file["number"]["number_9"]).data(), k_x, k_y, true);
 	scenes_home(x, y);
 	while (!game_end)
 	{
@@ -190,34 +196,33 @@ std::string menu::input_string(int a)
 ***********/
 void menu::scenes_home(int x, int y)
 {
-	TCHAR T = NULL;
-	bool home = false, oo = true;
+	bool home = false;
 	int run_for_int = 2;
 	IMAGE bg, up, down, start_unp, start_p, player_c;
 	double r_x = x / static_cast<double>(1920);
 	double r_y = y / static_cast<double>(1080);
 	int p_x, p_y;
-	loadimage(&bg, "./image/home/bg_.png", x, y, true);
-	loadimage(&up, "./image/home/up.png");
+	loadimage(&bg, static_cast<std::string>(Image_file["home"]["bg"]).data(), x, y, true);
+	loadimage(&up, static_cast<std::string>(Image_file["home"]["up_button"]).data());
 	p_x = up.getwidth() * r_x;
 	p_y = up.getheight() * r_y;
-	loadimage(&up, "./image/home/up.png", p_x, p_y, true);
-	loadimage(&down, "./image/home/down.png");
+	loadimage(&up, static_cast<std::string>(Image_file["home"]["up_button"]).data(), p_x, p_y, true);
+	loadimage(&down, static_cast<std::string>(Image_file["home"]["down_button"]).data());
 	p_x = down.getwidth() * r_x;
 	p_y = down.getheight() * r_y;
-	loadimage(&down, "./image/home/down.png", p_x, p_y, true);
-	loadimage(&start_unp, "./image/home/startbutton.png");
+	loadimage(&down, static_cast<std::string>(Image_file["home"]["down_button"]).data(), p_x, p_y, true);
+	loadimage(&start_unp, static_cast<std::string>(Image_file["home"]["start_button_no_push"]).data());
 	p_x = start_unp.getwidth() * r_x;
 	p_y = start_unp.getheight() * r_y;
-	loadimage(&start_unp, "./image/home/startbutton.png", p_x, p_y, true);
-	loadimage(&start_p, "./image/home/startbutton_down.png");
+	loadimage(&start_unp, static_cast<std::string>(Image_file["home"]["start_button_no_push"]).data(), p_x, p_y, true);
+	loadimage(&start_p, static_cast<std::string>(Image_file["home"]["start_button_push"]).data());
 	p_x = start_p.getwidth() * r_x;
 	p_y = start_p.getheight() * r_y;
-	loadimage(&start_p, "./image/home/startbutton_down.png", p_x, p_y, true);
-	loadimage(&player_c, "./image/home/playercount.png");
+	loadimage(&start_p, static_cast<std::string>(Image_file["home"]["start_button_push"]).data(), p_x, p_y, true);
+	loadimage(&player_c, static_cast<std::string>(Image_file["home"]["player_count"]).data());
 	p_x = player_c.getwidth() * r_x;
 	p_y = player_c.getheight() * r_y;
-	loadimage(&player_c, "./image/home/playercount.png", p_x, p_y, true);
+	loadimage(&player_c, static_cast<std::string>(Image_file["home"]["player_count"]).data(), p_x, p_y, true);
 	putimage(0, 0, &bg);
 	putimage(1117 * r_x, 619 * r_y, &up);
 	putimage(1151 * r_x, 659 * r_y, &down);
@@ -286,10 +291,11 @@ void menu::scenes_home(int x, int y)
 						{
 							for (; run_for_int != 0; run_for_int--)
 							{
-								Player[run_for_int].Name_NUMBER[0] = rand_v(39, 1);
-								Player[run_for_int].Name_NUMBER[1] = rand_v(39, 41);
-								Player[run_for_int].Name += (Player_NAME_RAND(Player[run_for_int].Name_NUMBER[0]) + Player_NAME_RAND(Player[run_for_int].Name_NUMBER[1]));
-								std::cout << Player[run_for_int].Name << std::endl;
+								player_set(x, y, run_for_int);
+								//Player[run_for_int].Name_NUMBER[0] = rand_v(39, 1);
+								//Player[run_for_int].Name_NUMBER[1] = rand_v(39, 41);
+								//Player[run_for_int].Name += (Player_NAME_RAND(Player[run_for_int].Name_NUMBER[0]) + Player_NAME_RAND(Player[run_for_int].Name_NUMBER[1]));
+								//std::cout << Player[run_for_int].Name << std::endl;
 							};
 						};
 					};
@@ -611,6 +617,78 @@ std::string menu::Player_NAME_RAND(const int num)
 		break;
 	}
 	return pnm;
+}
+void menu::player_set(int x, int y, int a)
+{
+	bool rca = false;
+	double r_x = x / static_cast<double>(1920);
+	double r_y = y / static_cast<double>(1080);
+	int p_x, p_y;
+	loadimage(&image[1], static_cast<std::string>(Image_file["player_set"]["bg"]).data(), x, y, true);
+	loadimage(&image[2], static_cast<std::string>(Image_file["player_set"]["next"]).data());
+	p_x = image[2].getwidth() * r_x;
+	p_y = image[2].getheight() * r_y;
+	loadimage(&image[2], static_cast<std::string>(Image_file["player_set"]["next"]).data(), x, y, true);
+	putimage(0, 0, &image[1]);
+	while (!rca)
+	{
+		if (Windows::input_r())
+		{
+			input = Windows::INPUT_READ();
+			if (input.message = 0x201)
+			{
+				if (button.button(input.x, input.y, 1) == 0x0)
+				{
+
+				}
+				else if (button.button(input.x, input.y, 1) == 0x0)
+				{
+
+				}
+				else if (button.button(input.x, input.y, 1) == 0x0)
+				{
+
+				}
+				else if (button.button(input.x, input.y, 1) == 0x0)
+				{
+
+				}
+				else if (button.button(input.x, input.y, 1) == 0x0)
+				{
+
+				}
+				else if (button.button(input.x, input.y, 1) == 0x0)
+				{
+
+				}
+				else if (button.button(input.x, input.y, 1) == 0x0)
+				{
+
+				}
+				else if (button.button(input.x, input.y, 1) == 0x0)
+				{
+
+				}
+				else if (button.button(input.x, input.y, 1) == 0x0)
+				{
+
+				}
+				else if (button.button(input.x, input.y, 1) == 0x0)
+				{
+
+				}
+				else if (button.button(input.x, input.y, 1) == 0x0)
+				{
+
+				}
+				else if (button.button(input.x, input.y, 1) == 0x0)
+				{
+
+				}
+			}
+		}
+	}
+	default_value(a,1);
 }
 void menu::player_run_scenes(int x)
 {
