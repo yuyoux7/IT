@@ -42,6 +42,7 @@ public:
 	void WINDOWS_TEXT(LPCWSTR lpString, int WINDOWS_SIZE_X, int WINDOWS_SIZE_Y, HWND hWnd = NULL);
 private:
 }easy_use;
+HWND WINDOWS_GUI_HWND;
 void often_use::WORLD_BG_RGB_SET_CMD(int __Forg_Color__, int __Back_Color__)
 {
 	WORD color_all = ((__Back_Color__ & 0x0F) << 4) + (__Forg_Color__ & 0x0F);
@@ -106,6 +107,7 @@ void often_use::WINDOWS_SET_SIZE(const int WINDOWS_SIZE_X, const int WINDOWS_SIZ
 	WINDOWS_WIN32.lpszClassName = L" ";
 	RegisterClassEx(&WINDOWS_WIN32);
 	HWND WIN32_WINDOWS_CREATE = CreateWindowExW(NULL, WINDOWS_WIN32.lpszClassName, WINDOWS_NAME, NULL, REST_WINDOWS_IP_X, REST_WINDOWS_IP_Y, WINDOWS_SIZE_X, WINDOWS_SIZE_Y, NULL, NULL, hInstance, NULL);
+	WINDOWS_GUI_HWND = WIN32_WINDOWS_CREATE;
 	ShowWindow(WIN32_WINDOWS_CREATE, flog);
 	BOOL WINDOW_MSG_GET;
 	MSG WINDOW_MSG_DOS{};
