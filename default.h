@@ -96,10 +96,6 @@ LRESULT CALLBACK MainWndProc(
 	}
 	return 0;
 }
-void often_use::WINDOWS_TEXT(LPCWSTR lpString, int WINDOWS_SIZE_X, int WINDOWS_SIZE_Y, HWND hWnd)
-{
-	TextOutW(NULL, WINDOWS_SIZE_X, WINDOWS_SIZE_Y, lpString, wcslen(lpString));
-}
 void often_use::WINDOWS_SET_SIZE(const int WINDOWS_SIZE_X, const int WINDOWS_SIZE_Y, LPCWSTR WINDOWS_NAME, HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine, int nCmdShow, int flog)
 {
 	WNDCLASSEX WINDOWS_WIN32{};
