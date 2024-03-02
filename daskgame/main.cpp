@@ -13,6 +13,7 @@ int main()
 	Windows Windows(x, y, 0 | 8);
 	Windows.Title("®à¹C");					//±MÃD
 	menu Menu{};
+	//setbkmode(TRANSPARENT);
 	setbkcolor(0x1F1E33);
 	cleardevice();
 	Menu.Menu();

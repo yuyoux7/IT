@@ -88,6 +88,80 @@ int Button::button(int ip_x, int ip_y, int list)
 		Button_IP[player_set][0xA500].X_ip = image[0].getwidth() * r_x;
 		Button_IP[player_set][0xA500].Y_ip = image[0].getheight() * r_y;
 		Button_IP[player_set][0xA500].button_value = 0xA500;
+		loadimage(&image[9], static_cast<std::string>(set["player_set"]["rand"]).data());
+		Button_IP[player_set][0xA590].X_ip = image[9].getwidth() * r_x;
+		Button_IP[player_set][0xA590].Y_ip = image[9].getheight() * r_y;
+		Button_IP[player_set][0xA590].button_value = 0xA590;
+		if (ip_x > (1920 - 350) * r_x && ip_x < (1920 - 350) * r_x + Button_IP[player_set][0xA500].X_ip)
+		{
+			if (ip_y > (1080 - 70) * r_y && ip_y < (1080 - 70) * r_y + Button_IP[player_set][0xA500].Y_ip)
+			{
+				return Button_IP[player_set][0xA500].button_value;
+			}
+		}
+		if (ip_x > 50 * r_x && ip_x < (50 * r_x + Button_IP[player_set][0xA510].X_ip))
+		{
+			if (ip_y > 370 * r_y && ip_y < (370 * r_y + Button_IP[player_set][0xA510].Y_ip))
+			{
+				return Button_IP[player_set][0xA510].button_value;
+			}
+		}
+		if (ip_x > 50 * r_x && ip_x < (50 * r_x + Button_IP[player_set][0xA520].X_ip))
+		{
+			if (ip_y > 520 * r_y && ip_y < (520 * r_y + Button_IP[player_set][0xA520].Y_ip))
+			{
+				return Button_IP[player_set][0xA520].button_value;
+			}
+		}
+		if (ip_x > 50 * r_x && ip_x < (50 * r_x + Button_IP[player_set][0xA530].X_ip))
+		{
+			if (ip_y > 670 * r_y && ip_y < (670 * r_y + Button_IP[player_set][0xA530].Y_ip))
+			{
+				return Button_IP[player_set][0xA530].button_value;
+			}
+		}
+		if (ip_x > 50 * r_x && ip_x < (50 * r_x + Button_IP[player_set][0xA540].X_ip))
+		{
+			if (ip_y > 820 * r_y && ip_y < (820 * r_y + Button_IP[player_set][0xA540].Y_ip))
+			{
+				return Button_IP[player_set][0xA540].button_value;
+			}
+		}
+		if (ip_x > 430 * r_x && ip_x < (430 * r_x + Button_IP[player_set][0xA550].X_ip))
+		{
+			if (ip_y > 370 * r_y && ip_y < (370 * r_y + Button_IP[player_set][0xA550].Y_ip))
+			{
+				return Button_IP[player_set][0xA550].button_value;
+			}
+		}
+		if (ip_x > 430 * r_x && ip_x < (430 * r_x + Button_IP[player_set][0xA560].X_ip))
+		{
+			if (ip_y > 520 * r_y && ip_y < (520 * r_y + Button_IP[player_set][0xA560].Y_ip))
+			{
+				return Button_IP[player_set][0xA560].button_value;
+			}
+		}
+		if (ip_x > 430 * r_x && ip_x < (430 * r_x + Button_IP[player_set][0xA570].X_ip))
+		{
+			if (ip_y > 670 * r_y && ip_y < (670 * r_y + Button_IP[player_set][0xA570].Y_ip))
+			{
+				return Button_IP[player_set][0xA570].button_value;
+			}
+		}
+		if (ip_x > 430 * r_x && ip_x < (430 * r_x + Button_IP[player_set][0xA580].X_ip))
+		{
+			if (ip_y > 820 * r_y && ip_y < (820 * r_y + Button_IP[player_set][0xA580].Y_ip))
+			{
+				return Button_IP[player_set][0xA580].button_value;
+			}
+		}
+		if (ip_x > 1645 * r_x && ip_x < (1645 * r_x + Button_IP[player_set][0xA590].X_ip))
+		{
+			if (ip_y > 385 * r_y && ip_y < (385 * r_y + Button_IP[player_set][0xA590].Y_ip))
+			{
+				return Button_IP[player_set][0xA590].button_value;
+			}
+		}
 		break;
 	case Button::game_round:
 		break;

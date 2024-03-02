@@ -5,8 +5,8 @@
 #define Count 0xFFFF
 struct Button_ip
 {
-	int X_ip;
-	int Y_ip;
+	double X_ip;
+	double Y_ip;
 	int button_value;
 	std::string fn;
 };
@@ -23,5 +23,5 @@ class Button
 public:
 	int button(int ip_x, int ip_y, int list);
 private:
-	IMAGE image[2000];
+	IMAGE image[500];
 };
