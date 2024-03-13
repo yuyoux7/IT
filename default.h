@@ -112,5 +112,5 @@ void often_use::WINDOWS_SET_SIZE(const int WINDOWS_SIZE_X, const int WINDOWS_SIZ
 }
 void often_use::WINDOWS_TEXT(LPCWSTR lpString, int WINDOWS_X, int WINDOWS_Y)
 {
-	TextOut(GetDC(WINDOWS_GUI_HWND), WINDOWS_X, WINDOWS_Y, lpString, sizeof(lpString) + 3);
+	TextOut(GetDC(WINDOWS_GUI_HWND), WINDOWS_X, WINDOWS_Y, lpString, sizeof(lpString));
 }
