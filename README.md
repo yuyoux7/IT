@@ -8,7 +8,7 @@
 在您的檔案中加入`#include "default.h"`
 即可輕鬆使用
 ### defailt.h調用演示
-```bash
+```C++
 #include "default.h"
 often_use user;
 int main(void)
@@ -19,13 +19,13 @@ int main(void)
 ```
 ### default.h功能說明
 #### GET_RAND();
-```bash
+```C++
 int GET_RAND(int __Bailiwick__ = 0);
 //得到一個由0開始向上的隨機的數值
 //Bailiwick可以限定上限值
 ```
 #### WORLD_BG_RGB_SET_CMD();
-```bash
+```C++
 void WORLD_BG_RGB_SET_CMD(int __Forg_Color__ = REST_FORG_COLOR, int __Back_Color__ = REST_BACK_COLOR);
 //設定文字及文字背景的顏色
 //不傳入參數視為重置顏色
@@ -40,8 +40,37 @@ void WORLD_BG_RGB_SET_CMD(int __Forg_Color__ = REST_FORG_COLOR, int __Back_Color
 //僅限於在編譯終端時使用
 ```
 #### MOVE_GOTO_SET_CMD();
-```bash
+```C++
 void MOVE_GOTO_SET_CMD(int __x__, int __y__);
 //將終端的光標移動至設定的位置
 //僅限於在編譯終端時使用
+```
+#### WINDOWS_SET_SIZE();
+```C++
+void WINDOWS_SET_SIZE(const int WINDOWS_SIZE_X, const int WINDOWS_SIZE_Y, LPCWSTR WINDOWS_NAME, HINSTANCE hInstance = NULL, HINSTANCE hPrevInstance = NULL, PWSTR pCmdLine = NULL, int nCmdShow = 1);
+//簡易的Window視窗建置
+```
+#### 使用演示
+```C++
+#include "default.h"
+often_use user;
+int main(void)
+{
+   user.WINDOWS_SET_SIZE(1920, 1080, L"[TEXT]");
+}
+```
+#### WINDOWS_TEXT();
+```C++
+void WINDOWS_TEXT(LPCWSTR lpString, int WINDOWS_SIZE_X, int WINDOWS_SIZE_Y);
+//簡易的Window視窗文字顯示
+```
+#### 使用演示
+```C++
+#include "default.h"
+often_use user;
+int main(void)
+{
+   user.WINDOWS_SET_SIZE(1920, 1080, L"[TEXT]");
+   user.WINDOWS_SET_SIZE(10, 10, L"Hello World!");
+}
 ```
