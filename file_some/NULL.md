@@ -1,7 +1,7 @@
 # NULL
 #### WINDOWS_SET_SIZE();
-```bash
-void WINDOWS_SET_SIZE(const int WINDOWS_SIZE_X, const int WINDOWS_SIZE_Y, LPCWSTR WINDOWS_NAME, HINSTANCE hInstance = NULL, HINSTANCE hPrevInstance = NULL, PWSTR pCmdLine = NULL, int nCmdShow = NULL, int flog = 1);
+```C++
+void WINDOWS_SET_SIZE(const int WINDOWS_SIZE_X, const int WINDOWS_SIZE_Y, LPCWSTR WINDOWS_NAME, HINSTANCE hInstance = NULL, HINSTANCE hPrevInstance = NULL, PWSTR pCmdLine = NULL, int nCmdShow = 1);
 //簡易的Window視窗建置
 ```
 #### 使用演示
@@ -14,12 +14,12 @@ int main(void)
 }
 ```
 #### WINDOWS_TEXT();
-```bash
-void WINDOWS_TEXT(LPCWSTR lpString, int WINDOWS_SIZE_X, int WINDOWS_SIZE_Y, HWND hWnd = NULL);
+```C++
+void WINDOWS_TEXT(LPCWSTR lpString, int WINDOWS_SIZE_X, int WINDOWS_SIZE_Y);
 //簡易的Window視窗文字顯示
 ```
 #### 使用演示
-```bash
+```C++
 #include "default.h"
 often_use user;
 int main(void)
