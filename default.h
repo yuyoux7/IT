@@ -38,11 +38,11 @@ public:
 	void WORLD_BG_RGB_SET_CMD(int __Forg_Color__ = REST_FORG_COLOR /*文字顏色*/, int __Back_Color__ = REST_BACK_COLOR /*背景顏色*/);
 	void MOVE_GOTO_SET_CMD(int __x__, int __y__);
 	void CLEAR_WINDOW_CMD();
-	void WINDOWS_SET_SIZE(const int WINDOWS_SIZE_X, const int WINDOWS_SIZE_Y, LPCWSTR WINDOWS_NAME, HINSTANCE hInstance = NULL, HINSTANCE hPrevInstance = NULL, PWSTR pCmdLine = NULL, int nCmdShow = NULL, int flog = 1);
-	void WINDOWS_TEXT(LPCWSTR lpString, int WINDOWS_SIZE_X, int WINDOWS_SIZE_Y, HWND hWnd = NULL);
+	void WINDOWS_SET_SIZE(const int WINDOWS_SIZE_X, const int WINDOWS_SIZE_Y, LPCWSTR WINDOWS_NAME, HINSTANCE hInstance = NULL, HINSTANCE hPrevInstance = NULL, PWSTR pCmdLine = NULL, int nCmdShow = 1);
+	void WINDOWS_TEXT(LPCWSTR lpString, int WINDOWS_SIZE_X, int WINDOWS_SIZE_Y);
 private:
+	HWND WINDOWS_GUI_HWND;
 }easy_use;
-HWND WINDOWS_GUI_HWND;
 void often_use::WORLD_BG_RGB_SET_CMD(int __Forg_Color__, int __Back_Color__)
 {
 	WORD color_all = ((__Back_Color__ & 0x0F) << 4) + (__Forg_Color__ & 0x0F);
@@ -97,7 +97,7 @@ LRESULT CALLBACK MainWndProc(
 	}
 	return 0;
 }
-void often_use::WINDOWS_SET_SIZE(const int WINDOWS_SIZE_X, const int WINDOWS_SIZE_Y, LPCWSTR WINDOWS_NAME, HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine, int nCmdShow, int flog)
+void often_use::WINDOWS_SET_SIZE(const int WINDOWS_SIZE_X, const int WINDOWS_SIZE_Y, LPCWSTR WINDOWS_NAME, HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine, int nCmdShow)
 {
 	WNDCLASSEX WINDOWS_WIN32{};
 	WINDOWS_WIN32.cbSize = sizeof(WNDCLASSEX);
@@ -108,20 +108,9 @@ void often_use::WINDOWS_SET_SIZE(const int WINDOWS_SIZE_X, const int WINDOWS_SIZ
 	RegisterClassEx(&WINDOWS_WIN32);
 	HWND WIN32_WINDOWS_CREATE = CreateWindowExW(NULL, WINDOWS_WIN32.lpszClassName, WINDOWS_NAME, NULL, REST_WINDOWS_IP_X, REST_WINDOWS_IP_Y, WINDOWS_SIZE_X, WINDOWS_SIZE_Y, NULL, NULL, hInstance, NULL);
 	WINDOWS_GUI_HWND = WIN32_WINDOWS_CREATE;
-	ShowWindow(WIN32_WINDOWS_CREATE, flog);
-	BOOL WINDOW_MSG_GET;
-	MSG WINDOW_MSG_DOS{};
-	GetMessage(&WINDOW_MSG_DOS, WIN32_WINDOWS_CREATE, NULL, NULL);
-	while ((WINDOW_MSG_GET = GetMessage(&WINDOW_MSG_DOS, WIN32_WINDOWS_CREATE, NULL, NULL)) != 0)
-	{
-		if (WINDOW_MSG_GET == -1)
-		{
-			// handle the error and possibly exit
-		}
-		else
-		{
-			TranslateMessage(&WINDOW_MSG_DOS);
-			DispatchMessage(&WINDOW_MSG_DOS);
-		}
-	}
+	ShowWindow(WIN32_WINDOWS_CREATE, nCmdShow);
+}
+void often_use::WINDOWS_TEXT(LPCWSTR lpString, int WINDOWS_X, int WINDOWS_Y)
+{
+	TextOut(GetHD(WINDOWS_GUI_HWND), WINDOWS_X, WINDOWS_Y, lpString, sizeof(lpString) + 3);
 }
