@@ -114,3 +114,7 @@ void often_use::WINDOWS_TEXT(LPCWSTR lpString, int WINDOWS_X, int WINDOWS_Y)
 {
 	TextOut(GetDC(WINDOWS_GUI_HWND), WINDOWS_X, WINDOWS_Y, lpString, sizeof(lpString));
 }
+void often_use::WINDOWS_CLOSE()
+{
+	CloseWindow(WINDOWS_GUI_HWND);
+}
