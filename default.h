@@ -116,5 +116,5 @@ void often_use::WINDOWS_TEXT(LPCWSTR lpString, int WINDOWS_X, int WINDOWS_Y)
 }
 void often_use::WINDOWS_CLOSE()
 {
-	CloseWindow(WINDOWS_GUI_HWND);
+	DestroyWindow(WINDOWS_GUI_HWND);
 }
