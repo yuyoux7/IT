@@ -5,7 +5,7 @@ void WINDOWS_SET_SIZE(const int WINDOWS_SIZE_X, const int WINDOWS_SIZE_Y, LPCWST
 //簡易的Window視窗建置
 ```
 #### 使用演示
-```bash
+```C++
 #include "default.h"
 often_use user;
 int main(void)
