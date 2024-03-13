@@ -40,6 +40,7 @@ public:
 	void CLEAR_WINDOW_CMD();
 	void WINDOWS_SET_SIZE(const int WINDOWS_SIZE_X, const int WINDOWS_SIZE_Y, LPCWSTR WINDOWS_NAME, HINSTANCE hInstance = NULL, HINSTANCE hPrevInstance = NULL, PWSTR pCmdLine = NULL, int nCmdShow = 1);
 	void WINDOWS_TEXT(LPCWSTR lpString, int WINDOWS_SIZE_X, int WINDOWS_SIZE_Y);
+ void WINDOWS_CLOSE();
 private:
 	HWND WINDOWS_GUI_HWND;
 }easy_use;
