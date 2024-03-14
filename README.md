@@ -6,7 +6,7 @@
 ### 如何使用default.h
 將它下載放置與您的專項同一個資料夾中
 在您的檔案中加入`#include "default.h"`
-即可輕鬆使用
+即可輕鬆使用(C++ 17+)
 ### defailt.h調用演示
 ```C++
 #include "default.h"
@@ -47,30 +47,28 @@ void MOVE_GOTO_SET_CMD(int __x__, int __y__);
 ```
 #### WINDOWS_SET_SIZE();
 ```C++
-void WINDOWS_SET_SIZE(const int WINDOWS_SIZE_X, const int WINDOWS_SIZE_Y, LPCWSTR WINDOWS_NAME, HINSTANCE hInstance = NULL, HINSTANCE hPrevInstance = NULL, PWSTR pCmdLine = NULL, int nCmdShow = 1);
+inline static void WINDOWS_SET_SIZE(const int WINDOWS_SIZE_X, const int WINDOWS_SIZE_Y, LPCWSTR WINDOWS_NAME, HINSTANCE hInstance = NULL, int nCmdShow = 5);
 //簡易的Window視窗建置
 ```
 #### 使用演示
 ```C++
 #include "default.h"
-often_use user;
 int main(void)
 {
-   user.WINDOWS_SET_SIZE(1920, 1080, L"[TEXT]");
+   often_use::WINDOWS_SET_SIZE(1920, 1080, L"[TEXT]");
 }
 ```
 #### WINDOWS_TEXT();
 ```C++
-void WINDOWS_TEXT(LPCWSTR lpString, int WINDOWS_SIZE_X, int WINDOWS_SIZE_Y);
+inline static void WINDOWS_TEXT(LPCWSTR lpString, int WINDOWS_SIZE_X, int WINDOWS_SIZE_Y);
 //簡易的Window視窗文字顯示
 ```
 #### 使用演示
 ```C++
 #include "default.h"
-often_use user;
 int main(void)
 {
-   user.WINDOWS_SET_SIZE(1920, 1080, L"[TEXT]");
-   user.WINDOWS_SET_SIZE(10, 10, L"Hello World!");
+   often_use::WINDOWS_SET_SIZE(1920, 1080, L"[TEXT]");
+   often_use::WINDOWS_TEXT(L"Hello World", 10, 10);
 }
 ```
