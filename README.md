@@ -72,3 +72,18 @@ int main(void)
    often_use::WINDOWS_TEXT(L"Hello World", 10, 10);
 }
 ```
+#### CLOSE_WINDOWS();
+```C++
+inline static void CLOSE_WINDOWS();
+//關閉視窗
+```
+#### 使用演示
+```C++
+#include "default.h"
+int main(void)
+{
+   often_use::WINDOWS_SET_SIZE(1920, 1080, L"[TEXT]");
+   often_use::WINDOWS_TEXT(L"Hello World", 10, 10);
+   often_use::CLOSE_WINDOWS();
+}
+```
