@@ -1,39 +1,57 @@
 #include "menu.h"
-Player_Data Player[11];
 Button button;
+Player_Data Player[11];
 int atk_value = NULL, now_player = NULL, list = 4, def_n = NULL;
 int player_count = NULL, Game_run = 20;
 bool game_end = false;
 nlohmann::json Image_file;
+nlohmann::json Text_Read;
 void menu::Menu()
 {
-	nlohmann::json Text_Read;
+	srand((unsigned)time(NULL));
 	std::ifstream File_Raed("config.json");
-	std::ifstream image_file("image_set.json");
-	image_file >> Image_file;
 	File_Raed >> Text_Read;
 	File_Raed.close();
+	std::ifstream image_file("image_set.json");
+	image_file >> Image_file;
 	image_file.close();
 	int up_list = NULL;
 	int x = Text_Read["X_size"];
 	int y = Text_Read["Y_size"];
-	loadimage(&number[0], static_cast<std::string>(Image_file["number"]["number_0"]).data(), 41 * static_cast<double>(x / static_cast <double>(1920)), 71 * static_cast<double>(y / static_cast <double>(1080)), true);
-	loadimage(&number[1], static_cast<std::string>(Image_file["number"]["number_1"]).data(), 41 * static_cast<double>(x / static_cast <double>(1920)), 71 * static_cast<double>(y / static_cast <double>(1080)), true);
-	loadimage(&number[2], static_cast<std::string>(Image_file["number"]["number_2"]).data(), 41 * static_cast<double>(x / static_cast <double>(1920)), 71 * static_cast<double>(y / static_cast <double>(1080)), true);
-	loadimage(&number[3], static_cast<std::string>(Image_file["number"]["number_3"]).data(), 41 * static_cast<double>(x / static_cast <double>(1920)), 71 * static_cast<double>(y / static_cast <double>(1080)), true);
-	loadimage(&number[4], static_cast<std::string>(Image_file["number"]["number_4"]).data(), 41 * static_cast<double>(x / static_cast <double>(1920)), 71 * static_cast<double>(y / static_cast <double>(1080)), true);
-	loadimage(&number[5], static_cast<std::string>(Image_file["number"]["number_5"]).data(), 41 * static_cast<double>(x / static_cast <double>(1920)), 71 * static_cast<double>(y / static_cast <double>(1080)), true);
-	loadimage(&number[6], static_cast<std::string>(Image_file["number"]["number_6"]).data(), 41 * static_cast<double>(x / static_cast <double>(1920)), 71 * static_cast<double>(y / static_cast <double>(1080)), true);
-	loadimage(&number[7], static_cast<std::string>(Image_file["number"]["number_7"]).data(), 41 * static_cast<double>(x / static_cast <double>(1920)), 71 * static_cast<double>(y / static_cast <double>(1080)), true);
-	loadimage(&number[8], static_cast<std::string>(Image_file["number"]["number_8"]).data(), 41 * static_cast<double>(x / static_cast <double>(1920)), 71 * static_cast<double>(y / static_cast <double>(1080)), true);
-	loadimage(&number[9], static_cast<std::string>(Image_file["number"]["number_9"]).data(), 41 * static_cast<double>(x / static_cast <double>(1920)), 71 * static_cast<double>(y / static_cast <double>(1080)), true);
+	loadimage(&number[0], static_cast<std::string>(Image_file["number"]["number_0"]).data());
+	loadimage(&number[1], static_cast<std::string>(Image_file["number"]["number_1"]).data());
+	loadimage(&number[2], static_cast<std::string>(Image_file["number"]["number_2"]).data());
+	loadimage(&number[3], static_cast<std::string>(Image_file["number"]["number_3"]).data());
+	loadimage(&number[4], static_cast<std::string>(Image_file["number"]["number_4"]).data());
+	loadimage(&number[5], static_cast<std::string>(Image_file["number"]["number_5"]).data());
+	loadimage(&number[6], static_cast<std::string>(Image_file["number"]["number_6"]).data());
+	loadimage(&number[7], static_cast<std::string>(Image_file["number"]["number_7"]).data());
+	loadimage(&number[8], static_cast<std::string>(Image_file["number"]["number_8"]).data());
+	loadimage(&number[9], static_cast<std::string>(Image_file["number"]["number_9"]).data());
+	loadimage(&number[10], static_cast<std::string>(Image_file["number"]["number_dash"]).data());
 	scenes_home(x, y);
+	now_player = player_count;
 	while (!game_end)
 	{
-		if (Windows::input_r())
+		player_run_scenes();
+		player_card_use(now_player);
+		for (auto i = 1; i <= player_count; i++)
 		{
-			input = Windows::INPUT_READ();
-
+			Player[i].Rsp -= 1;
+			if (Player[i].Rsp < 0)
+			{
+				Player[i].Rsp = player_count - 1;
+			}
+		}
+		now_player--;
+		if (now_player == 0)
+		{
+			now_player = player_count;
+			Game_run--;
+		}
+		if (Game_run == 0)
+		{
+			game_end = !game_end;
 		}
 	}
 }
@@ -71,121 +89,101 @@ void menu::atk_int()
 	}
 	list = 4;
 }
-void menu::image_load(int scenes, int x, int y)
+void menu::image_load(int scenes)
 {
-	double r_x = x / static_cast<double>(1920);
-	double r_y = y / static_cast<double>(1080);
-	int p_x, p_y;
 	switch (scenes)
 	{
 	case 1:
-		loadimage(&image[1], static_cast<std::string>(Image_file["player_set"]["bg"]).data(), x, y, true);
+		loadimage(&image[1], static_cast<std::string>(Image_file["player_set"]["bg"]).data());
 		loadimage(&image[2], static_cast<std::string>(Image_file["player_set"]["next"]).data());
-		p_x = image[2].getwidth() * r_x;
-		p_y = image[2].getheight() * r_y;
-		loadimage(&image[2], static_cast<std::string>(Image_file["player_set"]["next"]).data(), p_x, p_y, true);
 		loadimage(&image[3], static_cast<std::string>(Image_file["player_set"]["race"]["people"]).data());
-		p_x = image[3].getwidth() * r_x;
-		p_y = image[3].getheight() * r_y;
-		loadimage(&image[3], static_cast<std::string>(Image_file["player_set"]["race"]["people"]).data(), p_x, p_y, true);
 		loadimage(&image[4], static_cast<std::string>(Image_file["player_set"]["race"]["people_push"]).data());
-		p_x = image[4].getwidth() * r_x;
-		p_y = image[4].getheight() * r_y;
-		loadimage(&image[4], static_cast<std::string>(Image_file["player_set"]["race"]["people_push"]).data(), p_x, p_y, true);
 		loadimage(&image[5], static_cast<std::string>(Image_file["player_set"]["race"]["god"]).data());
-		p_x = image[5].getwidth() * r_x;
-		p_y = image[5].getheight() * r_y;
-		loadimage(&image[5], static_cast<std::string>(Image_file["player_set"]["race"]["god"]).data(), p_x, p_y, true);
 		loadimage(&image[6], static_cast<std::string>(Image_file["player_set"]["race"]["god_push"]).data());
-		p_x = image[6].getwidth() * r_x;
-		p_y = image[6].getheight() * r_y;
-		loadimage(&image[6], static_cast<std::string>(Image_file["player_set"]["race"]["god_push"]).data(), p_x, p_y, true);
 		loadimage(&image[7], static_cast<std::string>(Image_file["player_set"]["race"]["monster"]).data());
-		p_x = image[7].getwidth() * r_x;
-		p_y = image[7].getheight() * r_y;
-		loadimage(&image[7], static_cast<std::string>(Image_file["player_set"]["race"]["monster"]).data(), p_x, p_y, true);
 		loadimage(&image[8], static_cast<std::string>(Image_file["player_set"]["race"]["monster_push"]).data());
-		p_x = image[8].getwidth() * r_x;
-		p_y = image[8].getheight() * r_y;
-		loadimage(&image[8], static_cast<std::string>(Image_file["player_set"]["race"]["monster_push"]).data(), p_x, p_y, true);
 		loadimage(&image[9], static_cast<std::string>(Image_file["player_set"]["race"]["out_people"]).data());
-		p_x = image[9].getwidth() * r_x;
-		p_y = image[9].getheight() * r_y;
-		loadimage(&image[9], static_cast<std::string>(Image_file["player_set"]["race"]["out_people"]).data(), p_x, p_y, true);
 		loadimage(&image[10], static_cast<std::string>(Image_file["player_set"]["race"]["out_people_push"]).data());
-		p_x = image[10].getwidth() * r_x;
-		p_y = image[10].getheight() * r_y;
-		loadimage(&image[10], static_cast<std::string>(Image_file["player_set"]["race"]["out_people_push"]).data(), p_x, p_y, true);
 		loadimage(&image[11], static_cast<std::string>(Image_file["player_set"]["race"]["thinking_people"]).data());
-		p_x = image[11].getwidth() * r_x;
-		p_y = image[11].getheight() * r_y;
-		loadimage(&image[11], static_cast<std::string>(Image_file["player_set"]["race"]["thinking_people"]).data(), p_x, p_y, true);
 		loadimage(&image[12], static_cast<std::string>(Image_file["player_set"]["race"]["thinking_people_push"]).data());
-		p_x = image[12].getwidth() * r_x;
-		p_y = image[12].getheight() * r_y;
-		loadimage(&image[12], static_cast<std::string>(Image_file["player_set"]["race"]["thinking_people_push"]).data(), p_x, p_y, true);
 		loadimage(&image[13], static_cast<std::string>(Image_file["player_set"]["race"]["elf"]).data());
-		p_x = image[13].getwidth() * r_x;
-		p_y = image[13].getheight() * r_y;
-		loadimage(&image[13], static_cast<std::string>(Image_file["player_set"]["race"]["elf"]).data(), p_x, p_y, true);
 		loadimage(&image[14], static_cast<std::string>(Image_file["player_set"]["race"]["elf_push"]).data());
-		p_x = image[14].getwidth() * r_x;
-		p_y = image[14].getheight() * r_y;
-		loadimage(&image[14], static_cast<std::string>(Image_file["player_set"]["race"]["elf_push"]).data(), p_x, p_y, true);
 		loadimage(&image[15], static_cast<std::string>(Image_file["player_set"]["race"]["bug"]).data());
-		p_x = image[15].getwidth() * r_x;
-		p_y = image[15].getheight() * r_y;
-		loadimage(&image[15], static_cast<std::string>(Image_file["player_set"]["race"]["bug"]).data(), p_x, p_y, true);
 		loadimage(&image[16], static_cast<std::string>(Image_file["player_set"]["race"]["bug_push"]).data());
-		p_x = image[16].getwidth() * r_x;
-		p_y = image[16].getheight() * r_y;
-		loadimage(&image[16], static_cast<std::string>(Image_file["player_set"]["race"]["bug_push"]).data(), p_x, p_y, true);
 		loadimage(&image[17], static_cast<std::string>(Image_file["player_set"]["race"]["no_save_monster"]).data());
-		p_x = image[17].getwidth() * r_x;
-		p_y = image[17].getheight() * r_y;
-		loadimage(&image[17], static_cast<std::string>(Image_file["player_set"]["race"]["no_save_monster"]).data(), p_x, p_y, true);
 		loadimage(&image[18], static_cast<std::string>(Image_file["player_set"]["race"]["no_save_monster_push"]).data());
-		p_x = image[18].getwidth() * r_x;
-		p_y = image[18].getheight() * r_y;
-		loadimage(&image[18], static_cast<std::string>(Image_file["player_set"]["race"]["no_save_monster_push"]).data(), p_x, p_y, true);
 		loadimage(&image[19], static_cast<std::string>(Image_file["player_set"]["player_value_box"]["exist"]).data());
-		p_x = image[19].getwidth() * r_x;
-		p_y = image[19].getheight() * r_y;
-		loadimage(&image[19], static_cast<std::string>(Image_file["player_set"]["player_value_box"]["exist"]).data(), p_x, p_y, true);
 		loadimage(&image[20], static_cast<std::string>(Image_file["player_set"]["player_value_box"]["anchored"]).data());
-		p_x = image[20].getwidth() * r_x;
-		p_y = image[20].getheight() * r_y;
-		loadimage(&image[20], static_cast<std::string>(Image_file["player_set"]["player_value_box"]["anchored"]).data(), p_x, p_y, true);
 		loadimage(&image[21], static_cast<std::string>(Image_file["player_set"]["player_value_box"]["affect"]).data());
-		p_x = image[21].getwidth() * r_x;
-		p_y = image[21].getheight() * r_y;
-		loadimage(&image[21], static_cast<std::string>(Image_file["player_set"]["player_value_box"]["affect"]).data(), p_x, p_y, true);
 		loadimage(&image[22], static_cast<std::string>(Image_file["player_set"]["player_value_box"]["observatuon"]).data());
-		p_x = image[22].getwidth() * r_x;
-		p_y = image[22].getheight() * r_y;
-		loadimage(&image[22], static_cast<std::string>(Image_file["player_set"]["player_value_box"]["observatuon"]).data(), p_x, p_y, true);
 		loadimage(&image[23], static_cast<std::string>(Image_file["player_set"]["player_value_box"]["intellect"]).data());
-		p_x = image[23].getwidth() * r_x;
-		p_y = image[23].getheight() * r_y;
-		loadimage(&image[23], static_cast<std::string>(Image_file["player_set"]["player_value_box"]["intellect"]).data(), p_x, p_y, true);
 		loadimage(&image[24], static_cast<std::string>(Image_file["player_set"]["player_value_box"]["understand"]).data());
-		p_x = image[24].getwidth() * r_x;
-		p_y = image[24].getheight() * r_y;
-		loadimage(&image[24], static_cast<std::string>(Image_file["player_set"]["player_value_box"]["understand"]).data(), p_x, p_y, true);
 		loadimage(&image[25], static_cast<std::string>(Image_file["player_set"]["player_name_box"]).data());
-		p_x = image[25].getwidth() * r_x;
-		p_y = image[25].getheight() * r_y;
-		loadimage(&image[25], static_cast<std::string>(Image_file["player_set"]["player_name_box"]).data(), p_x, p_y, true);
 		loadimage(&image[26], static_cast<std::string>(Image_file["player_set"]["rand"]).data());
-		p_x = image[26].getwidth() * r_x;
-		p_y = image[26].getheight() * r_y;
-		loadimage(&image[26], static_cast<std::string>(Image_file["player_set"]["rand"]).data(), p_x, p_y, true);
+		loadimage(&image[27], static_cast<std::string>(Image_file["player_set"]["dicenumber"]).data());
+		loadimage(&image[270], static_cast<std::string>(Image_file["player_set"]["dicenumder"]).data());
+		loadimage(&image[28], static_cast<std::string>(Image_file["player_set"]["up"]).data(), 0.7, 0.7);
+		loadimage(&image[29], static_cast<std::string>(Image_file["player_set"]["down"]).data(), 0.7, 0.7);
+		loadimage(&e_number[0], static_cast<std::string>(Image_file["number"]["number_0"]).data(), 0.78, 0.78);
+		loadimage(&e_number[1], static_cast<std::string>(Image_file["number"]["number_1"]).data(), 0.78, 0.78);
+		loadimage(&e_number[2], static_cast<std::string>(Image_file["number"]["number_2"]).data(), 0.78, 0.78);
+		loadimage(&e_number[3], static_cast<std::string>(Image_file["number"]["number_3"]).data(), 0.78, 0.78);
+		loadimage(&e_number[4], static_cast<std::string>(Image_file["number"]["number_4"]).data(), 0.78, 0.78);
+		loadimage(&e_number[5], static_cast<std::string>(Image_file["number"]["number_5"]).data(), 0.78, 0.78);
+		loadimage(&e_number[6], static_cast<std::string>(Image_file["number"]["number_6"]).data(), 0.78, 0.78);
+		loadimage(&e_number[7], static_cast<std::string>(Image_file["number"]["number_7"]).data(), 0.78, 0.78);
+		loadimage(&e_number[8], static_cast<std::string>(Image_file["number"]["number_8"]).data(), 0.78, 0.78);
+		loadimage(&e_number[9], static_cast<std::string>(Image_file["number"]["number_9"]).data(), 0.78, 0.78);
 		break;
-		case 2:
-			break;
-		case 3:
-
-			break;
+	case 2:
+		loadimage(&image[60], static_cast<std::string>(Image_file["game_round"]["bg"]).data());
+		loadimage(&image[61], static_cast<std::string>(Image_file["game_round"]["first"]).data());
+		loadimage(&image[62], static_cast<std::string>(Image_file["game_round"]["second"]).data());
+		loadimage(&image[63], static_cast<std::string>(Image_file["game_round"]["third"]).data());
+		loadimage(&image[64], static_cast<std::string>(Image_file["game_round"]["forth"]).data());
+		loadimage(&image[65], static_cast<std::string>(Image_file["game_round"]["player_block"]).data());
+		loadimage(&image[66], static_cast<std::string>(Image_file["game_round"]["player_order"]).data());
+		loadimage(&image[67], static_cast<std::string>(Image_file["game_round"]["next_player"]).data());
+		loadimage(&image[68], static_cast<std::string>(Image_file["game_round"]["next"]).data());
+		loadimage(&image[69], static_cast<std::string>(Image_file["game_round"]["round"]).data());
+		break;
+	case 3:
+		loadimage(&image[30], static_cast<std::string>(Image_file["gamecard_set"]["bg"]).data());
+		loadimage(&image[31], static_cast<std::string>(Image_file["gamecard_set"]["no"]).data());
+		loadimage(&image[32], static_cast<std::string>(Image_file["gamecard_set"]["yes"]).data());
+		loadimage(&image[33], static_cast<std::string>(Image_file["gamecard_set"]["card"]).data());
+		loadimage(&image[34], static_cast<std::string>(Image_file["gamecard_set"]["magic"]).data());
+		loadimage(&image[35], static_cast<std::string>(Image_file["gamecard_set"]["taoism"]).data());
+		loadimage(&image[36], static_cast<std::string>(Image_file["gamecard_set"]["atk"]).data());
+		loadimage(&image[37], static_cast<std::string>(Image_file["gamecard_set"]["next"]).data());
+		loadimage(&image[38], static_cast<std::string>(Image_file["gamecard_set"]["delete"]).data());
+		loadimage(&image[39], static_cast<std::string>(Image_file["gamecard_set"]["now_step"]).data());
+		loadimage(&image[40], static_cast<std::string>(Image_file["gamecard_set"]["game_round"]).data());
+		loadimage(&image[41], static_cast<std::string>(Image_file["gamecard_set"]["effect"]["effect"]).data());
+		loadimage(&image[42], static_cast<std::string>(Image_file["gamecard_set"]["player_value_box"]["exist"]).data());
+		loadimage(&image[43], static_cast<std::string>(Image_file["gamecard_set"]["player_value_box"]["anchored"]).data());
+		loadimage(&image[44], static_cast<std::string>(Image_file["gamecard_set"]["player_value_box"]["affect"]).data());
+		loadimage(&image[45], static_cast<std::string>(Image_file["gamecard_set"]["player_value_box"]["observatuon"]).data());
+		loadimage(&image[46], static_cast<std::string>(Image_file["gamecard_set"]["player_value_box"]["intellect"]).data());
+		loadimage(&image[47], static_cast<std::string>(Image_file["gamecard_set"]["player_value_box"]["understand"]).data());
+		loadimage(&image[50], static_cast<std::string>(Image_file["gamecard_set"]["player_name"]).data());
+		break;
+	case 4:
+		loadimage(&image[100], static_cast<std::string>(Image_file["atk_set"]["bg"]).data());
+		loadimage(&image[101], static_cast<std::string>(Image_file["atk_set"]["atkeffect"]).data());
+		loadimage(&image[102], static_cast<std::string>(Image_file["atk_set"]["tageffect"]).data());
+		loadimage(&image[103], static_cast<std::string>(Image_file["atk_set"]["exist"]).data());
+		loadimage(&image[104], static_cast<std::string>(Image_file["atk_set"]["anchored"]).data());
+		loadimage(&image[105], static_cast<std::string>(Image_file["atk_set"]["affect"]).data());
+		loadimage(&image[106], static_cast<std::string>(Image_file["atk_set"]["observatuon"]).data());
+		loadimage(&image[107], static_cast<std::string>(Image_file["atk_set"]["intellect"]).data());
+		loadimage(&image[108], static_cast<std::string>(Image_file["atk_set"]["understand"]).data());
+		loadimage(&image[109], static_cast<std::string>(Image_file["atk_set"]["next"]).data());
+		loadimage(&image[110], static_cast<std::string>(Image_file["atk_set"]["patk"]).data());
+		loadimage(&image[111], static_cast<std::string>(Image_file["atk_set"]["pch"]).data());
+		loadimage(&image[112], static_cast<std::string>(Image_file["atk_set"]["pnch"]).data());
+		loadimage(&image[113], static_cast<std::string>(Image_file["atk_set"]["pnm"]).data());
+		break;
 	default:
 		break;
 	}
@@ -212,17 +210,17 @@ std::string menu::input_string(int a)
 				{
 					if (input.vkcode - '0' < 10)
 					{
-						Player[a].Name += input.vkcode;
+						Player[player].Name += input.vkcode;
 						text += input.vkcode;
 					}
 					else if (input.vkcode - '0' > 47)
 					{
-						Player[a].Name += input.vkcode - 48;
+						Player[player].Name += input.vkcode - 48;
 						text += input.vkcode - 48;
 					}
 					else
 					{
-						Player[a].Name += input.vkcode + 32;
+						Player[player].Name += input.vkcode + 32;
 						text += input.vkcode + 32;
 					};
 					outtextxy(x, 20, text);
@@ -242,7 +240,7 @@ std::string menu::input_string(int a)
 			}
 		}
 	}
-	return Player[a].Name;
+	return Player[player].Name;
 	*/
 }
 /***********
@@ -262,36 +260,18 @@ void menu::scenes_home(int x, int y)
 	bool home = false;
 	int run_for_int = 2;
 	IMAGE bg, up, down, start_unp, start_p, player_c;
-	double r_x = x / static_cast<double>(1920);
-	double r_y = y / static_cast<double>(1080);
-	int p_x, p_y;
-	loadimage(&bg, static_cast<std::string>(Image_file["home"]["bg"]).data(), x, y, true);
+	loadimage(&bg, static_cast<std::string>(Image_file["home"]["bg"]).data());
 	loadimage(&up, static_cast<std::string>(Image_file["home"]["up_button"]).data());
-	p_x = up.getwidth() * r_x;
-	p_y = up.getheight() * r_y;
-	loadimage(&up, static_cast<std::string>(Image_file["home"]["up_button"]).data(), p_x, p_y, true);
 	loadimage(&down, static_cast<std::string>(Image_file["home"]["down_button"]).data());
-	p_x = down.getwidth() * r_x;
-	p_y = down.getheight() * r_y;
-	loadimage(&down, static_cast<std::string>(Image_file["home"]["down_button"]).data(), p_x, p_y, true);
 	loadimage(&start_unp, static_cast<std::string>(Image_file["home"]["start_button_no_push"]).data());
-	p_x = start_unp.getwidth() * r_x;
-	p_y = start_unp.getheight() * r_y;
-	loadimage(&start_unp, static_cast<std::string>(Image_file["home"]["start_button_no_push"]).data(), p_x, p_y, true);
 	loadimage(&start_p, static_cast<std::string>(Image_file["home"]["start_button_push"]).data());
-	p_x = start_p.getwidth() * r_x;
-	p_y = start_p.getheight() * r_y;
-	loadimage(&start_p, static_cast<std::string>(Image_file["home"]["start_button_push"]).data(), p_x, p_y, true);
 	loadimage(&player_c, static_cast<std::string>(Image_file["home"]["player_count"]).data());
-	p_x = player_c.getwidth() * r_x;
-	p_y = player_c.getheight() * r_y;
-	loadimage(&player_c, static_cast<std::string>(Image_file["home"]["player_count"]).data(), p_x, p_y, true);
 	putimage(0, 0, &bg);
-	putimage(1117 * r_x, 619 * r_y, &up);
-	putimage(1151 * r_x, 659 * r_y, &down);
-	putimage(782 * r_x, 622 * r_y, &player_c);
-	putimage(952 * r_x, 630 * r_y, &number[2]);
-	putimage(702 * r_x, 780 * r_y, &start_unp);
+	putimage(1117, 619 , &up);
+	putimage(1151, 659 , &down);
+	putimage(782, 622 , &player_c);
+	putimage(952, 638 + 5, &number[2]);
+	putimage(702, 780 , &start_unp);
 	while (!home)
 	{
 		if (Windows::input_r())
@@ -330,12 +310,12 @@ void menu::scenes_home(int x, int y)
 				else if (button.button(input.x, input.y, 0) == 0xA450)
 				{
 					putimage(0, 0, &bg);
-					putimage(1117 * r_x, 619 * r_y, &up);
-					putimage(1151 * r_x, 659 * r_y, &down);
-					putimage(782 * r_x, 622 * r_y, &player_c);
-					if (run_for_int != 10)  putimage(952 * r_x, 630 * r_y, &number[run_for_int]);
-					else { putimage(952 * r_x, 630 * r_y, &number[1]); putimage(952 * r_x + 41 * static_cast<double>(x / static_cast <double>(1920)), 630 * r_y, &number[0]); }
-					putimage(702 * r_x, 800 * r_y, &start_p);
+					putimage(1117, 619 , &up);
+					putimage(1151, 659 , &down);
+					putimage(782, 622 , &player_c);
+					if (run_for_int != 10)  putimage(952, 638 + 5, &number[run_for_int]);
+					else { putimage(952, 638 + 5, &number[1]); putimage(955 + 43 * static_cast<double>(x / static_cast <double>(1920)), 638 + 5, &number[0]); }
+					putimage(702, 800 , &start_p);
 					Sleep(80);
 					while (input.message != 0x00000202)
 					{
@@ -344,29 +324,26 @@ void menu::scenes_home(int x, int y)
 							input = Windows::INPUT_READ();
 						}
 					}
-					putimage(702 * r_x, 780 * r_y, &start_unp);
+					putimage(702, 780 , &start_unp);
 					if (button.button(input.x, input.y, 0) == 0xA450)
 					{
 						player_count = run_for_int;
 						home = !home;
-						image_load(1, x, y);
+						image_load(1);
 						cleardevice();
 						if (player_count != 0)
 						{
 							for (; run_for_int != 0; run_for_int--)
 							{
+								Player[run_for_int].Rsp = player_count - run_for_int;
 								player_set(x, y, run_for_int);
-								//Player[run_for_int].Name_NUMBER[0] = rand_v(39, 1);
-								//Player[run_for_int].Name_NUMBER[1] = rand_v(39, 41);
-								//Player[run_for_int].Name += (Player_NAME_RAND(Player[run_for_int].Name_NUMBER[0]) + Player_NAME_RAND(Player[run_for_int].Name_NUMBER[1]));
-								//std::cout << Player[run_for_int].Name << std::endl;
 							};
 						};
 					};
 				};
-				putimage(782 * r_x, 622 * r_y, &player_c);
-				if (run_for_int != 10)  putimage(952 * r_x, 630 * r_y, &number[run_for_int]);
-				else { putimage(952 * r_x, 630 * r_y, &number[1]); putimage(952 * r_x + 41 * static_cast<double>(x / static_cast <double>(1920)), 630 * r_y, &number[0]); }
+				putimage(782, 622 , &player_c);
+				if (run_for_int != 10)  putimage(952, 638 + 5, &number[run_for_int]);
+				else { putimage(952, 638 + 5, &number[1]); putimage(955 + 43 * static_cast<double>(x / static_cast <double>(1920)), 638 + 5, &number[0]); }
 			};
 		};
 	};
@@ -382,30 +359,30 @@ void menu::default_value(int a, int b)
 	Player[a].observatuon = 0;
 	switch (Player[a].Race)
 	{
-	case 1:
+	case 0xA510:
 		Player[a].observatuon += 5;
 		break;
-	case 2:
+	case 0xA520:
 		Player[a].understand += 5;
 		break;
-	case 3:
+	case 0xA530:
 		Player[a].affect += 5;
 		break;
-	case 4:
+	case 0xA540:
 		Player[a].intellect -= 50;
 		break;
-	case 5:
+	case 0xA550:
 		Player[a].anchored -= 50;
 		break;
-	case 6:
+	case 0xA560:
 		Player[a].exist += 5;
 		break;
-	case 7:
+	case 0xA570:
 		Player[a].anchored -= 25;
 		Player[a].affect += 5;
 		Player[a].exist += 5;
 		break;
-	case 8:
+	case 0xA580:
 		Player[a].understand += 2;
 		Player[a].affect += 2;
 		Player[a].anchored += 2;
@@ -417,7 +394,6 @@ void menu::default_value(int a, int b)
 }
 int menu::rand_v(const int a, const int b)
 {
-	srand((unsigned)time(NULL));
 	if (a > 0)
 	{
 		return rand() % a + b;
@@ -682,29 +658,40 @@ std::string menu::Player_NAME_RAND(const int num)
 	}
 	return pnm;
 }
-void menu::player_set(int x, int y, int a)
+void menu::player_set(int x, int y, int player)
 {
 	bool rca = false;
 	double r_x = x / static_cast<double>(1920);
 	double r_y = y / static_cast<double>(1080);
+	int dicenumber_v = 1;
 	putimage(0, 0, &image[1]);
-	putimage(50 * r_x, 370 * r_y, &image[3]);
-	putimage(50 * r_x, 520 * r_y, &image[5]);
-	putimage(50 * r_x, 670 * r_y, &image[7]);
-	putimage(50 * r_x, 820 * r_y, &image[9]);
-	putimage(430 * r_x, 370 * r_y, &image[11]);
-	putimage(430 * r_x, 520 * r_y, &image[13]);
-	putimage(430 * r_x, 670 * r_y, &image[15]);
-	putimage(430 * r_x, 820 * r_y, &image[17]);
-	putimage(830 * r_x, 370 * r_y, &image[19]);
-	putimage(830 * r_x, 471 * r_y, &image[20]);
-	putimage(830 * r_x, 572 * r_y, &image[21]);
-	putimage(830 * r_x, 673 * r_y, &image[22]);
-	putimage(830 * r_x, 774 * r_y, &image[23]);
-	putimage(830 * r_x, 874 * r_y, &image[24]);
-	putimage(1340 * r_x, 400 * r_y, &image[25]);
-	putimage(1645 * r_x, 385 * r_y, &image[26]);
-	putimage((1920 - 350)* r_x, (1080 - 70)* r_y, &image[2]);
+	putimage(50, 370 , &image[3]);
+	putimage(50, 520 , &image[5]);
+	putimage(50, 670 , &image[7]);
+	putimage(50, 820 , &image[9]);
+	putimage(430, 370 , &image[11]);
+	putimage(430, 520 , &image[13]);
+	putimage(430, 670 , &image[15]);
+	putimage(430, 820 , &image[17]);
+	putimage(830, 370 , &image[19]);
+	putimage(830, 471 , &image[20]);
+	putimage(830, 572 , &image[21]);
+	putimage(830, 673 , &image[22]);
+	putimage(830, 774 , &image[23]);
+	putimage(830, 874 , &image[24]);
+	putimage(1340, 400 , &image[25]);
+	putimage(1645, 385 , &image[26]);
+	putimage(1340, 600, &image[27]);
+	putimage(1625, 600, &image[28]);
+	putimage(1625, 640, &image[29]);
+	putimage((1920 - 350), (1080 - 70), &image[2]);
+	Player[player].Name_NUMBER[0] = rand_v(39, 1);
+	Player[player].Name_NUMBER[1] = rand_v(39, 41);
+	loadimage(&Player[player].Name[0], Player_NAME_RAND(Player[player].Name_NUMBER[0]).data());
+	loadimage(&Player[player].Name[1], Player_NAME_RAND(Player[player].Name_NUMBER[1]).data());
+	putimage(1354, 473, &Player[player].Name[0]);
+	putimage(1605, 473, &Player[player].Name[1]);
+	putimage(1560, 615, &e_number[dicenumber_v]);
 	while (!rca)
 	{
 		if (Windows::input_r())
@@ -712,73 +699,129 @@ void menu::player_set(int x, int y, int a)
 			input = Windows::INPUT_READ();
 			if (input.message == 0x201)
 			{
-				if (button.button(input.x, input.y, 1) != 0xA500 && button.button(input.x, input.y, 1) != 0 && button.button(input.x, input.y, 1) != 0xA590)
+				if (button.button(input.x, input.y, 1) != 0xA500 && button.button(input.x, input.y, 1) != 0 && button.button(input.x, input.y, 1) != 0xA590 && button.button(input.x, input.y, 1) != 0xB510 && button.button(input.x, input.y, 1) != 0xB520)
 				{
-					Player[a].Race = button.button(input.x, input.y, 1);
-					default_value(a, 1);
-					putimage(50 * r_x, 370 * r_y, &image[3]);
-					putimage(50 * r_x, 520 * r_y, &image[5]);
-					putimage(50 * r_x, 670 * r_y, &image[7]);
-					putimage(50 * r_x, 820 * r_y, &image[9]);
-					putimage(430 * r_x, 370 * r_y, &image[11]);
-					putimage(430 * r_x, 520 * r_y, &image[13]);
-					putimage(430 * r_x, 670 * r_y, &image[15]);
-					putimage(430 * r_x, 820 * r_y, &image[17]);
-					putimage(830 * r_x, 370 * r_y, &image[19]);
-					putimage(830 * r_x, 471 * r_y, &image[20]);
-					putimage(830 * r_x, 572 * r_y, &image[21]);
-					putimage(830 * r_x, 673 * r_y, &image[22]);
-					putimage(830 * r_x, 774 * r_y, &image[23]);
-					putimage(830 * r_x, 874 * r_y, &image[24]);
-					switch (Player[a].Race)
+					Player[player].Race = button.button(input.x, input.y, 1);
+					default_value(player, 1);
+					putimage(50, 370 , &image[3]);
+					putimage(50, 520 , &image[5]);
+					putimage(50, 670 , &image[7]);
+					putimage(50, 820 , &image[9]);
+					putimage(430, 370 , &image[11]);
+					putimage(430, 520 , &image[13]);
+					putimage(430, 670 , &image[15]);
+					putimage(430, 820 , &image[17]);
+					putimage(830, 370 , &image[19]);
+					putimage(830, 471 , &image[20]);
+					putimage(830, 572 , &image[21]);
+					putimage(830, 673 , &image[22]);
+					putimage(830, 774 , &image[23]);
+					putimage(830, 874 , &image[24]);
+					switch (Player[player].Race)
 					{
 					case 0xA510:
-						putimage(50 * r_x, 370 * r_y, &image[4]);
+						putimage(50, 370 , &image[4]);
 						break;
 					case 0xA520:
-						putimage(50 * r_x, 520 * r_y, &image[6]);
+						putimage(50, 520 , &image[6]);
 						break;
 					case 0xA530:
-						putimage(50 * r_x, 670 * r_y, &image[8]);
+						putimage(50, 670 , &image[8]);
 						break;
 					case 0xA540:
-						putimage(50 * r_x, 820 * r_y, &image[10]);
+						putimage(50, 820 , &image[10]);
 						break;
 					case 0xA550:
-						putimage(430 * r_x, 370 * r_y, &image[12]);
+						putimage(430, 370 , &image[12]);
 						break;
 					case 0xA560:
-						putimage(430 * r_x, 520 * r_y, &image[14]);
+						putimage(430, 520 , &image[14]);
 						break;
 					case 0xA570:
-						putimage(430 * r_x, 670 * r_y, &image[16]);
+						putimage(430, 670 , &image[16]);
 						break;
 					case 0xA580:
-						putimage(430 * r_x, 820 * r_y, &image[18]);
+						putimage(430, 820 , &image[18]);
 						break;
 					default:
 						break;
 					}
+					default_value(player, dicenumber_v);
+					putimage(1100, 375 + 5, &e_number[Player[player].exist / 10]);// dv 1 ip
+					putimage(1140, 375 + 5, &e_number[Player[player].exist - ((Player[player].exist / 10) * 10)]);
+					putimage(1080, 477 + 5, &e_number[Player[player].anchored / 100]);// dv 2 ip
+					putimage(1120, 477 + 5, &e_number[(Player[player].anchored - (Player[player].anchored / 100) * 100) / 10]);
+					putimage(1160, 477 + 5, &e_number[(Player[player].anchored - (Player[player].anchored / 100) * 100) - ((Player[player].anchored - (Player[player].anchored / 100) * 100) / 10) * 10]);
+					putimage(1100, 578 + 5, &e_number[Player[player].affect / 10]);// dv 3 ip
+					putimage(1140, 578 + 5, &e_number[Player[player].affect - ((Player[player].affect / 10) * 10)]);
+					putimage(1100, 679 + 5, &e_number[Player[player].observatuon / 10]);// dv 4 ip
+					putimage(1140, 679 + 5, &e_number[Player[player].observatuon - ((Player[player].observatuon / 10) * 10)]);
+					putimage(1080, 780 + 5, &e_number[Player[player].intellect / 100]);// dv 5 ip
+					putimage(1120, 780 + 5, &e_number[(Player[player].intellect - (Player[player].intellect / 100) * 100) / 10]);
+					putimage(1160, 780 + 5, &e_number[Player[player].intellect - ((Player[player].intellect / 100) * 100) - ((Player[player].intellect - (Player[player].intellect / 100) * 100) / 10) * 10]);
+					putimage(1100, 880 + 5, &e_number[Player[player].understand / 10]);// dv 6 ip
+					putimage(1140, 880 + 5, &e_number[Player[player].understand - ((Player[player].understand / 10) * 10)]);
 				}
 				if (button.button(input.x, input.y, 1) == 0xA590)
 				{
-					Player[a].Name_NUMBER[0] = rand_v(39, 1);
-					Player[a].Name_NUMBER[1] = rand_v(39, 41);
-					int p_x, p_y;
-					loadimage(&Player[a].Name[0], Player_NAME_RAND(Player[a].Name_NUMBER[0]).data());
-					p_x = Player[a].Name[0].getwidth() * r_x;
-					p_y = Player[a].Name[0].getheight() * r_y;
-					loadimage(&Player[a].Name[0], Player_NAME_RAND(Player[a].Name_NUMBER[0]).data(), p_x, p_y, true);
-					loadimage(&Player[a].Name[1], Player_NAME_RAND(Player[a].Name_NUMBER[1]).data());
-					p_x = Player[a].Name[1].getwidth() * r_x;
-					p_y = Player[a].Name[1].getheight() * r_y;
-					loadimage(&Player[a].Name[1], Player_NAME_RAND(Player[a].Name_NUMBER[1]).data(), p_x, p_y, true);
+					Player[player].Name_NUMBER[0] = rand_v(39, 1);
+					Player[player].Name_NUMBER[1] = rand_v(39, 41);
+					loadimage(&Player[player].Name[0], Player_NAME_RAND(Player[player].Name_NUMBER[0]).data());
+					loadimage(&Player[player].Name[1], Player_NAME_RAND(Player[player].Name_NUMBER[1]).data());
+					putimage(1354, 473, &Player[player].Name[0]);
+					putimage(1605, 473, &Player[player].Name[1]);
+				}
+				if (button.button(input.x, input.y, 1) == 0xB510 && Player[player].Race != 0)
+				{
+					if (dicenumber_v < 6)
+					{
+						++dicenumber_v;
+					}
+					putimage(1560, 615, &e_number[dicenumber_v]);
+					default_value(player, dicenumber_v);
+					putimage(1100, 375 + 5, &e_number[Player[player].exist / 10]);// dv 1 ip
+					putimage(1140, 375 + 5, &e_number[Player[player].exist - ((Player[player].exist / 10) * 10)]);
+					putimage(1080, 477 + 5, &e_number[Player[player].anchored / 100]);// dv 2 ip
+					putimage(1120, 477 + 5, &e_number[(Player[player].anchored - (Player[player].anchored / 100) * 100) / 10]);
+					putimage(1160, 477 + 5, &e_number[(Player[player].anchored - (Player[player].anchored / 100) * 100) - ((Player[player].anchored - (Player[player].anchored / 100) * 100) / 10) * 10]);
+					putimage(1100, 578 + 5, &e_number[Player[player].affect / 10]);// dv 3 ip
+					putimage(1140, 578 + 5, &e_number[Player[player].affect - ((Player[player].affect / 10) * 10)]);
+					putimage(1100, 679 + 5, &e_number[Player[player].observatuon / 10]);// dv 4 ip
+					putimage(1140, 679 + 5, &e_number[Player[player].observatuon - ((Player[player].observatuon / 10) * 10)]);
+					putimage(1080, 780 + 5, &e_number[Player[player].intellect / 100]);// dv 5 ip
+					putimage(1120, 780 + 5, &e_number[(Player[player].intellect - (Player[player].intellect / 100) * 100) / 10]);
+					putimage(1160, 780 + 5, &e_number[Player[player].intellect - ((Player[player].intellect / 100) * 100) - ((Player[player].intellect - (Player[player].intellect / 100) * 100) / 10) * 10]);
+					putimage(1100, 880 + 5, &e_number[Player[player].understand / 10]);// dv 6 ip
+					putimage(1140, 880 + 5, &e_number[Player[player].understand - ((Player[player].understand / 10) * 10)]);
+				}
+				if (button.button(input.x, input.y, 1) == 0xB520 && Player[player].Race != 0)
+				{
+					if (dicenumber_v > 1)
+					{
+						--dicenumber_v;
+					}
+					putimage(1560, 615, &e_number[dicenumber_v]);
+					default_value(player, dicenumber_v);
+					putimage(1100, 375 + 5, &e_number[Player[player].exist / 10]);// dv 1 ip
+					putimage(1140, 375 + 5, &e_number[Player[player].exist - ((Player[player].exist / 10) * 10)]);
+					putimage(1080, 477 + 5, &e_number[Player[player].anchored / 100]);// dv 2 ip
+					putimage(1120, 477 + 5, &e_number[(Player[player].anchored - (Player[player].anchored / 100) * 100) / 10]);
+					putimage(1160, 477 + 5, &e_number[(Player[player].anchored - (Player[player].anchored / 100) * 100) - ((Player[player].anchored - (Player[player].anchored / 100) * 100) / 10) * 10]);
+					putimage(1100, 578 + 5, &e_number[Player[player].affect / 10]);// dv 3 ip
+					putimage(1140, 578 + 5, &e_number[Player[player].affect - ((Player[player].affect / 10) * 10)]);
+					putimage(1100, 679 + 5, &e_number[Player[player].observatuon / 10]);// dv 4 ip
+					putimage(1140, 679 + 5, &e_number[Player[player].observatuon - ((Player[player].observatuon / 10) * 10)]);
+					putimage(1080, 780 + 5, &e_number[Player[player].intellect / 100]);// dv 5 ip
+					putimage(1120, 780 + 5, &e_number[(Player[player].intellect - (Player[player].intellect / 100) * 100) / 10]);
+					putimage(1160, 780 + 5, &e_number[Player[player].intellect - ((Player[player].intellect / 100) * 100) - ((Player[player].intellect - (Player[player].intellect / 100) * 100) / 10) * 10]);
+					putimage(1100, 880 + 5, &e_number[Player[player].understand / 10]);// dv 6 ip
+					putimage(1140, 880 + 5, &e_number[Player[player].understand - ((Player[player].understand / 10) * 10)]);
 				}
 				if (button.button(input.x, input.y, 1) == 0xA500)
 				{
-					if (Player[a].Race != 0)
+					if (Player[player].Race != 0)
 					{
-						default_value(a, 0);
+						default_value(player, dicenumber_v);
 						rca = !rca;
 					}
 				}
@@ -786,24 +829,154 @@ void menu::player_set(int x, int y, int a)
 		}
 	}
 }
-void menu::player_run_scenes(int x)
-{
-	TCHAR chh = NULL;
-	outtextxy(x - 80, 40, "³Ñ");
-	outtextxy(x - 80, 60, "¾l");
-	outtextxy(x - 80, 80, "½ü");
-	outtextxy(x - 80, 100, "¦¸");
-	outtextxy(x - 77, 120, ":");
-	chh = Game_run / 10 + 48;
-	outtextxy(x - 80, 140, chh);
-	chh = Game_run % 10 + 48;
-	outtextxy(x - 70, 140, chh);
-}
-void menu::player_card_use(int x, int y, int a)
+void menu::player_run_scenes()
 {
 	bool run = false;
-	loadimage(&image[30], static_cast<std::string>(Image_file["gamecard_set"]["bg"]).data(), x, y, true);
-	putimage(0, 0, &image[30]);
+	bool kfp = false;
+	int lppy = NULL;
+	int pcld[10];
+	image_load(2);
+	putimage(0, 0, &image[60]);
+	putimage(130, 500, &image[66]);
+	putimage(130, 250, &image[67]);
+	putimage(1780, 50, &image[69]);
+	putimage(1570, 1010, &image[68]);
+	putimage(100, 350, &image[61]);
+	putimage(500, 350, &image[62]);
+	putimage(150, 600, &image[65]);
+	putimage(500, 600, &image[65]);
+	putimage(1430,970,&image[270]);
+	putimage(1790, 450, &e_number[Game_run / 10]); putimage(1825, 450, &e_number[Game_run - (Game_run / 10) * 10]);
+	for (auto i = 1; i <= player_count; i++)
+	{
+		for (auto j = 1; j <= player_count; j++)
+		{
+			if (Player[j].Rsp  == i - 1)
+			{
+				pcld[i] = j;
+			}
+		}
+	}
+	putimage(160, 370, &Player[pcld[1]].Name[0]); putimage(340, 370, &Player[pcld[1]].Name[1]);
+	putimage(560, 370, &Player[pcld[2]].Name[0]); putimage(740, 370, &Player[pcld[2]].Name[1]);
+	putimage(160, 620, &Player[player_count].Name[0]); putimage(340, 620, &Player[player_count].Name[1]);
+	putimage(510, 620, &Player[player_count - 1].Name[0]); putimage(690, 620, &Player[player_count - 1].Name[1]);
+	switch (player_count)
+	{
+	case 3:
+		putimage(900, 350, &image[63]);
+		putimage(850, 600, &image[65]);
+		putimage(860, 620, &Player[player_count - 2].Name[0]); putimage(1040, 620, &Player[player_count - 2].Name[1]);
+		break;
+	case 4:
+		putimage(900, 350, &image[63]);
+		putimage(1300, 350, &image[64]);
+		putimage(850, 600, &image[65]);
+		putimage(1200, 600, &image[65]);
+		putimage(860, 620, &Player[player_count - 2].Name[0]); putimage(1040, 620, &Player[player_count - 2].Name[1]);
+		putimage(1210, 620, &Player[player_count - 3].Name[0]); putimage(1390, 620, &Player[player_count - 3].Name[1]);
+		break;
+	case 5:
+		putimage(900, 350, &image[63]);
+		putimage(1300, 350, &image[64]);
+		putimage(850, 600, &image[65]);
+		putimage(1200, 600, &image[65]);
+		putimage(1550, 600, &image[65]);
+		putimage(860, 620, &Player[player_count - 2].Name[0]); putimage(1040, 620, &Player[player_count - 2].Name[1]);
+		putimage(1210, 620, &Player[player_count - 3].Name[0]); putimage(1390, 620, &Player[player_count - 3].Name[1]);
+		putimage(1560, 620, &Player[player_count - 4].Name[0]); putimage(1740, 620, &Player[player_count - 4].Name[1]);
+		break;
+	case 6:
+		putimage(900, 350, &image[63]);
+		putimage(1300, 350, &image[64]);
+		putimage(850, 600, &image[65]);
+		putimage(1200, 600, &image[65]);
+		putimage(1550, 600, &image[65]);
+		putimage(150, 750, &image[65]);
+		putimage(860, 620, &Player[player_count - 2].Name[0]); putimage(1040, 620, &Player[player_count - 2].Name[1]);
+		putimage(1210, 620, &Player[player_count - 3].Name[0]); putimage(1390, 620, &Player[player_count - 3].Name[1]);
+		putimage(1560, 620, &Player[player_count - 4].Name[0]); putimage(1740, 620, &Player[player_count - 4].Name[1]);
+		putimage(160, 770, &Player[player_count - 5].Name[0]); putimage(340, 770, &Player[player_count - 5].Name[1]);
+		break;
+	case 7:
+		putimage(900, 350, &image[63]);
+		putimage(1300, 350, &image[64]);
+		putimage(850, 600, &image[65]);
+		putimage(1200, 600, &image[65]);
+		putimage(1550, 600, &image[65]);
+		putimage(150, 750, &image[65]);
+		putimage(500, 750, &image[65]);
+		putimage(860, 620, &Player[player_count - 2].Name[0]); putimage(1040, 620, &Player[player_count - 2].Name[1]);
+		putimage(1210, 620, &Player[player_count - 3].Name[0]); putimage(1390, 620, &Player[player_count - 3].Name[1]);
+		putimage(1560, 620, &Player[player_count - 4].Name[0]); putimage(1740, 620, &Player[player_count - 4].Name[1]);
+		putimage(160, 770, &Player[player_count - 5].Name[0]); putimage(340, 770, &Player[player_count - 5].Name[1]);
+		putimage(510, 770, &Player[player_count - 6].Name[0]); putimage(690, 770, &Player[player_count - 6].Name[1]);
+		break;
+	case 8:
+		putimage(900, 350, &image[63]);
+		putimage(1300, 350, &image[64]);
+		putimage(850, 600, &image[65]);
+		putimage(1200, 600, &image[65]);
+		putimage(1550, 600, &image[65]);
+		putimage(150, 750, &image[65]);
+		putimage(500, 750, &image[65]);
+		putimage(850, 750, &image[65]);
+		putimage(860, 620, &Player[player_count - 2].Name[0]); putimage(1040, 620, &Player[player_count - 2].Name[1]);
+		putimage(1210, 620, &Player[player_count - 3].Name[0]); putimage(1390, 620, &Player[player_count - 3].Name[1]);
+		putimage(1560, 620, &Player[player_count - 4].Name[0]); putimage(1740, 620, &Player[player_count - 4].Name[1]);
+		putimage(160, 770, &Player[player_count - 5].Name[0]); putimage(340, 770, &Player[player_count - 5].Name[1]);
+		putimage(510, 770, &Player[player_count - 6].Name[0]); putimage(690, 770, &Player[player_count - 6].Name[1]);
+		putimage(860, 770, &Player[player_count - 7].Name[0]); putimage(1040, 770, &Player[player_count - 7].Name[1]);
+		break;
+	case 9:
+		putimage(900, 350, &image[63]);
+		putimage(1300, 350, &image[64]);
+		putimage(850, 600, &image[65]);
+		putimage(1200, 600, &image[65]);
+		putimage(1550, 600, &image[65]);
+		putimage(150, 750, &image[65]);
+		putimage(500, 750, &image[65]);
+		putimage(850, 750, &image[65]);
+		putimage(1200, 750, &image[65]);
+		putimage(860, 620, &Player[player_count - 2].Name[0]); putimage(1040, 620, &Player[player_count - 2].Name[1]);
+		putimage(1210, 620, &Player[player_count - 3].Name[0]); putimage(1390, 620, &Player[player_count - 3].Name[1]);
+		putimage(1560, 620, &Player[player_count - 4].Name[0]); putimage(1740, 620, &Player[player_count - 4].Name[1]);
+		putimage(160, 770, &Player[player_count - 5].Name[0]); putimage(340, 770, &Player[player_count - 5].Name[1]);
+		putimage(510, 770, &Player[player_count - 6].Name[0]); putimage(690, 770, &Player[player_count - 6].Name[1]);
+		putimage(860, 770, &Player[player_count - 7].Name[0]); putimage(1040, 770, &Player[player_count - 7].Name[1]);
+		putimage(1210, 770, &Player[player_count - 8].Name[0]); putimage(1390, 770, &Player[player_count - 8].Name[1]);
+		break;
+	case 10:
+		putimage(900, 350, &image[63]);
+		putimage(1300, 350, &image[64]);
+		putimage(850, 600, &image[65]);
+		putimage(1200, 600, &image[65]);
+		putimage(1550, 600, &image[65]);
+		putimage(150, 750, &image[65]);
+		putimage(500, 750, &image[65]);
+		putimage(850, 750, &image[65]);
+		putimage(1200, 750, &image[65]);
+		putimage(1550, 750, &image[65]);
+		putimage(860, 620, &Player[player_count - 2].Name[0]); putimage(1040, 620, &Player[player_count - 2].Name[1]);
+		putimage(1210, 620, &Player[player_count - 3].Name[0]); putimage(1390, 620, &Player[player_count - 3].Name[1]);
+		putimage(1560, 620, &Player[player_count - 4].Name[0]); putimage(1740, 620, &Player[player_count - 4].Name[1]);
+		putimage(160, 770, &Player[player_count -5].Name[0]); putimage(340, 770, &Player[player_count - 5].Name[1]);
+		putimage(510, 770, &Player[player_count - 6].Name[0]); putimage(690, 770, &Player[player_count - 6].Name[1]);
+		putimage(860, 770, &Player[player_count - 7].Name[0]); putimage(1040, 770, &Player[player_count - 7].Name[1]);
+		putimage(1210, 770, &Player[player_count - 8].Name[0]); putimage(1390, 770, &Player[player_count - 8].Name[1]);
+		putimage(1560, 770, &Player[player_count - 9].Name[0]); putimage(1740, 770, &Player[player_count - 9].Name[1]);
+		break;
+	default:
+		break;
+	}
+	if (player_count >= 3)
+	{
+		putimage(960, 370, &Player[pcld[3]].Name[0]); putimage(1140, 370, &Player[pcld[3]].Name[1]);
+		if (player_count >= 4)
+		{
+			putimage(1360, 370, &Player[pcld[4]].Name[0]); putimage(1540, 370, &Player[pcld[4]].Name[1]);
+		}
+	}
 	while (!run)
 	{
 		if (Windows::input_r())
@@ -811,21 +984,352 @@ void menu::player_card_use(int x, int y, int a)
 			input = Windows::INPUT_READ();
 			if (input.message == 0x00000201)
 			{
-
+				switch (button.button(input.x, input.y, 2))
+				{
+				case 0xA600:
+					run = !run;
+					break;
+				case 0xA650: case 0xA651: case 0xA652: case 0xA653: case 0xA654:
+				case 0xA655: case 0xA656: case 0xA657: case 0xA658: case 0xA659:
+					lppy = button.button(input.x, input.y, 2) - 0xA650;
+					std::cout << lppy;
+					if (lppy <= player_count)
+					{
+						if (player_count < 10)
+						{
+							putimage(1460, 1000, &e_number[Player[player_count - lppy].Rsp + 1]);
+						}
+						else
+						{
+							putimage(1445, 1000, &e_number[(Player[player_count - lppy].Rsp + 1) / 10]);
+							putimage(1475, 1000, &e_number[(Player[player_count - lppy].Rsp + 1) - ((Player[player_count - lppy].Rsp + 1) / 10) * 10]);
+						}
+						
+					}
+					//kfp = true;
+					break;
+				}
+			}
+		}
+	}
+}
+void menu::player_card_use(int player)
+{
+	bool run = false;
+	image_load(3);
+	putimage(0, 0, &image[30]);
+	putimage(100, 220, &image[50]); putimage(270, 223, &Player[player].Name[0]); putimage(435, 223, &Player[player].Name[1]);
+	putimage(100, 380, &image[42]); putimage(100, 480, &image[43]); putimage(100, 580, &image[44]);
+	putimage(100, 680, &image[45]); putimage(100, 780, &image[46]); putimage(100, 880, &image[47]);
+	putimage(640, 140, &image[33]); putimage(640, 280, &image[35]); putimage(640, 380, &image[34]);
+	putimage(640, 530, &image[41]); putimage(830, 210, &image[31]); putimage(970, 210, &image[32]);
+	putimage(1100, 280, &image[38]); putimage(1660, 100, &image[39]); putimage(1780, 100, &image[40]);
+	//putimage(1670, 500, &e_number[Game_run / 10]); putimage(1705, 500, &e_number[Game_run - (Game_run / 10) * 10]);
+	putimage(1790, 500, &e_number[Game_run / 10]); putimage(1825, 500, &e_number[Game_run - (Game_run / 10) * 10]);
+	putimage(1570, 900, &image[36]); putimage(1570, 1010, &image[37]);
+	if (Player[player].affect < 0)
+	{
+		putimage(280, 588, &number[10]);
+		Player[player].affect *= -1;
+		putimage(340, 590, &e_number[Player[player].affect / 100]);
+		putimage(380, 590, &e_number[(Player[player].affect - (Player[player].affect / 100) * 100) / 10]);
+		putimage(420, 590, &e_number[(Player[player].affect - (Player[player].affect / 100) * 100) - ((Player[player].affect - (Player[player].affect / 100) * 100) / 10) * 10]);
+		Player[player].affect *= -1;
+	}
+	else
+	{
+		putimage(340, 590, &e_number[Player[player].affect / 100]);
+		putimage(380, 590, &e_number[(Player[player].affect - (Player[player].affect / 100) * 100) / 10]);
+		putimage(420, 590, &e_number[(Player[player].affect - (Player[player].affect / 100) * 100) - ((Player[player].affect - (Player[player].affect / 100) * 100) / 10) * 10]);
+	}
+	if (Player[player].anchored < 0)
+	{
+		putimage(280, 488, &number[10]);
+		Player[player].anchored *= -1;
+		putimage(340, 490, &e_number[Player[player].anchored / 100]);
+		putimage(380, 490, &e_number[(Player[player].anchored - (Player[player].anchored / 100) * 100) / 10]);
+		putimage(420, 490, &e_number[(Player[player].anchored - (Player[player].anchored / 100) * 100) - ((Player[player].anchored - (Player[player].anchored / 100) * 100) / 10) * 10]);
+		Player[player].anchored *= -1;
+	}
+	else
+	{
+		putimage(340, 490, &e_number[Player[player].anchored / 100]);
+		putimage(380, 490, &e_number[(Player[player].anchored - (Player[player].anchored / 100) * 100) / 10]);
+		putimage(420, 490, &e_number[(Player[player].anchored - (Player[player].anchored / 100) * 100) - ((Player[player].anchored - (Player[player].anchored / 100) * 100) / 10) * 10]);
+	}
+	if (Player[player].exist < 0)
+	{
+		putimage(280, 388, &number[10]);
+		Player[player].exist *= -1;
+		putimage(340, 390, &e_number[Player[player].exist / 100]);
+		putimage(380, 390, &e_number[(Player[player].exist - (Player[player].exist / 100) * 100) / 10]);
+		putimage(420, 390, &e_number[(Player[player].exist - (Player[player].exist / 100) * 100) - ((Player[player].exist - (Player[player].exist / 100) * 100) / 10) * 10]);
+		Player[player].exist *= -1;
+	}
+	else
+	{
+		putimage(340, 390, &e_number[Player[player].exist / 100]);
+		putimage(380, 390, &e_number[(Player[player].exist - (Player[player].exist / 100) * 100) / 10]);
+		putimage(420, 390, &e_number[(Player[player].exist - (Player[player].exist / 100) * 100) - ((Player[player].exist - (Player[player].exist / 100) * 100) / 10) * 10]);
+	}
+	if (Player[player].intellect < 0)
+	{
+		putimage(280, 788, &number[10]);
+		Player[player].intellect *= -1;
+		putimage(340, 790, &e_number[Player[player].intellect / 100]);
+		putimage(380, 790, &e_number[(Player[player].intellect - (Player[player].intellect / 100) * 100) / 10]);
+		putimage(420, 790, &e_number[(Player[player].intellect - (Player[player].intellect / 100) * 100) - ((Player[player].intellect - (Player[player].intellect / 100) * 100) / 10) * 10]);
+		Player[player].intellect *= -1;
+	}
+	else
+	{
+		putimage(340, 790, &e_number[Player[player].intellect / 100]);
+		putimage(380, 790, &e_number[(Player[player].intellect - (Player[player].intellect / 100) * 100) / 10]);
+		putimage(420, 790, &e_number[(Player[player].intellect - (Player[player].intellect / 100) * 100) - ((Player[player].intellect - (Player[player].intellect / 100) * 100) / 10) * 10]);
+	}
+	if (Player[player].understand < 0)
+	{
+		putimage(280, 888, &number[10]);
+		Player[player].understand *= -1;
+		putimage(340, 890, &e_number[Player[player].understand / 100]);
+		putimage(380, 890, &e_number[(Player[player].understand - (Player[player].understand / 100) * 100) / 10]);
+		putimage(420, 890, &e_number[(Player[player].understand - (Player[player].understand / 100) * 100) - ((Player[player].understand - (Player[player].understand / 100) * 100) / 10) * 10]);
+		Player[player].understand *= -1;
+	}
+	else
+	{
+		putimage(340, 890, &e_number[Player[player].understand / 100]);
+		putimage(380, 890, &e_number[(Player[player].understand - (Player[player].understand / 100) * 100) / 10]);
+		putimage(420, 890, &e_number[(Player[player].understand - (Player[player].understand / 100) * 100) - ((Player[player].understand - (Player[player].understand / 100) * 100) / 10) * 10]);
+	}
+	putimage(340, 690, &e_number[Player[player].observatuon / 100]);
+	putimage(380, 690, &e_number[(Player[player].observatuon - (Player[player].observatuon / 100) * 100) / 10]);
+	putimage(420, 690, &e_number[(Player[player].observatuon - (Player[player].observatuon / 100) * 100) - ((Player[player].observatuon - (Player[player].observatuon / 100) * 100) / 10) * 10]);
+	while (!run)
+	{
+		if (Windows::input_r())
+		{
+			input = Windows::INPUT_READ();
+			if (input.message == 0x00000201)
+			{
+				switch (button.button(input.x, input.y, 3))
+				{
+				case 0xA710:
+					break;
+				case 0xA720:
+					break;
+				case 0xA730:
+					break;
+				case 0xA740:
+					break;
+				case 0xA750:
+					break;
+				case 0xA760:
+					atk_scenes(player);
+					run = !run;
+					break;
+				case 0xA770:
+					run = !run;
+					break;
+				case 0xA700:
+					break;
+				default:
+					break;
+				}
+			}
+		}
+	}
+}
+void menu::atk_scenes(int player)
+{
+	bool run = false;
+	u_string kbipt = NULL;
+	h16 atkp = NULL;
+	image_load(4);
+	putimage(0, 0, &image[100]);
+	putimage(100, 170, &image[113]);
+	putimage(270, 175, &Player[player].Name[0]); putimage(435, 175, &Player[player].Name[1]);
+	putimage(100, 280, &image[103]);
+	putimage(100, 390, &image[104]);
+	putimage(100, 500, &image[105]);
+	putimage(100, 610, &image[106]);
+	putimage(100, 720, &image[107]);
+	putimage(100, 830, &image[108]);
+	putimage(630, 170, &image[110]);
+	putimage(930, 70, &image[112]); putimage(1270, 70, &image[112]); putimage(1610, 70, &image[112]);
+	putimage(930, 180, &image[112]); putimage(1270, 180, &image[112]); putimage(1610, 180, &image[112]);
+	putimage(930, 290, &image[112]); putimage(1270, 290, &image[112]); putimage(1610, 290, &image[112]);
+	/*putimage(940, 80, &Player[player].Name[0]); putimage(1110, 80, &Player[player].Name[1]);
+	putimage(1280, 80, &Player[player].Name[0]); putimage(1450, 80, &Player[player].Name[1]);
+	putimage(1620, 80, &Player[player].Name[0]); putimage(1790, 80, &Player[player].Name[1]);
+	putimage(940, 190, &Player[player].Name[0]); putimage(1110, 190, &Player[player].Name[1]);
+	putimage(1280, 190, &Player[player].Name[0]); putimage(1450, 190, &Player[player].Name[1]);
+	putimage(1620, 190, &Player[player].Name[0]); putimage(1790, 190, &Player[player].Name[1]);
+	putimage(940, 300, &Player[player].Name[0]); putimage(1110, 300, &Player[player].Name[1]);
+	putimage(1280, 300, &Player[player].Name[0]); putimage(1450, 300, &Player[player].Name[1]);
+	putimage(1620, 300, &Player[player].Name[0]); putimage(1790, 300, &Player[player].Name[1]);*/
+	putimage(630, 400, &image[101]);
+	putimage(630, 650, &image[102]);
+	putimage(1570, 1010, &image[109]);
+	while (!run)
+	{
+		if (Windows::input_r())
+		{
+			input = Windows::INPUT_READ();
+			if (input.message == 0x00000201)
+			{
+				atkp = button.button(input.x, input.y, 4) - 0xAD0;
+				switch (button.button(input.x, input.y, 4))
+				{
+				case 0xAD1:
+					putimage(930, 70, &image[111]); putimage(1270, 70, &image[112]); putimage(1610, 70, &image[112]);
+					putimage(930, 180, &image[112]); putimage(1270, 180, &image[112]); putimage(1610, 180, &image[112]);
+					putimage(930, 290, &image[112]); putimage(1270, 290, &image[112]); putimage(1610, 290, &image[112]);
+					break;
+				case 0xAD2:
+					putimage(930, 70, &image[112]); putimage(1270, 70, &image[111]); putimage(1610, 70, &image[112]);
+					putimage(930, 180, &image[112]); putimage(1270, 180, &image[112]); putimage(1610, 180, &image[112]);
+					putimage(930, 290, &image[112]); putimage(1270, 290, &image[112]); putimage(1610, 290, &image[112]);
+					break;
+				case 0xAD3:
+					putimage(930, 70, &image[112]); putimage(1270, 70, &image[112]); putimage(1610, 70, &image[111]);
+					putimage(930, 180, &image[112]); putimage(1270, 180, &image[112]); putimage(1610, 180, &image[112]);
+					putimage(930, 290, &image[112]); putimage(1270, 290, &image[112]); putimage(1610, 290, &image[112]);
+					break;
+				case 0xAD4:
+					putimage(930, 70, &image[112]); putimage(1270, 70, &image[112]); putimage(1610, 70, &image[112]);
+					putimage(930, 180, &image[111]); putimage(1270, 180, &image[112]); putimage(1610, 180, &image[112]);
+					putimage(930, 290, &image[112]); putimage(1270, 290, &image[112]); putimage(1610, 290, &image[112]);
+					break;
+				case 0xAD5:
+					putimage(930, 70, &image[112]); putimage(1270, 70, &image[112]); putimage(1610, 70, &image[112]);
+					putimage(930, 180, &image[112]); putimage(1270, 180, &image[111]); putimage(1610, 180, &image[112]);
+					putimage(930, 290, &image[112]); putimage(1270, 290, &image[112]); putimage(1610, 290, &image[112]);
+					break;
+				case 0xAD6:
+					putimage(930, 70, &image[112]); putimage(1270, 70, &image[112]); putimage(1610, 70, &image[112]);
+					putimage(930, 180, &image[112]); putimage(1270, 180, &image[112]); putimage(1610, 180, &image[111]);
+					putimage(930, 290, &image[112]); putimage(1270, 290, &image[112]); putimage(1610, 290, &image[112]);
+					break;
+				case 0xAD7:
+					putimage(930, 70, &image[112]); putimage(1270, 70, &image[112]); putimage(1610, 70, &image[112]);
+					putimage(930, 180, &image[112]); putimage(1270, 180, &image[112]); putimage(1610, 180, &image[112]);
+					putimage(930, 290, &image[111]); putimage(1270, 290, &image[112]); putimage(1610, 290, &image[112]);
+					break;
+				case 0xAD8:
+					putimage(930, 70, &image[112]); putimage(1270, 70, &image[112]); putimage(1610, 70, &image[112]);
+					putimage(930, 180, &image[112]); putimage(1270, 180, &image[112]); putimage(1610, 180, &image[112]);
+					putimage(930, 290, &image[112]); putimage(1270, 290, &image[111]); putimage(1610, 290, &image[112]);
+					break;
+				case 0xAD9:
+					putimage(930, 70, &image[112]); putimage(1270, 70, &image[112]); putimage(1610, 70, &image[112]);
+					putimage(930, 180, &image[112]); putimage(1270, 180, &image[112]); putimage(1610, 180, &image[112]);
+					putimage(930, 290, &image[112]); putimage(1270, 290, &image[112]); putimage(1610, 290, &image[111]);
+					break;
+				case 0xA990:
+					//atk_int();
+					run = !run;
+					break;
+				}
 			}
 		}
 	}
 }
 void menu::game_run_end(int a, int b)
 {
-	cleardevice();
-	outtextxy(a / 2 - 40, b / 2, "Game End");
-	Sleep(10000);
-	closegraph();
-};
+	
+}
+void menu::word_lib(u_string lib)
+{
+	h16 dtade = 0;
+	if (lib[0] == 'F' || lib[0] == 'f')
+	{
+		dtade = 1;
+	}
+	switch (lib[dtade])
+	{
+	case '1':
+		break;
+	case '2':
+		break;
+	case '3':
+		break;
+	case '4':
+		break;
+	case '5':
+		break;
+	case '6':
+		break;
+	case '7':
+		break;
+	case '8':
+		break;
+	case '9':
+		break;
+	case '0':
+		break;
+	case 'A': case 'a':
+		break;
+	case 'B': case 'b':
+		break;
+	case 'C': case 'c':
+		break;
+	case 'D': case 'd':
+		break;
+	case 'E': case 'e':
+		break;
+	case 'F': case 'f':
+		break;
+	default:
+		break;
+	}
+}
+void menu::putimage(int x, int y, const IMAGE* image)
+{
+	double r_x = Text_Read["X_size"] / static_cast<double>(1920);
+	double r_y = Text_Read["Y_size"] / static_cast<double>(1080);
+	::putimage(x * r_x, y * r_y, image);
+}
+void menu::loadimage(IMAGE* img, LPCTSTR address, double dx, double dy)
+{
+		double r_x = Text_Read["X_size"] / static_cast<double>(1920);
+		double r_y = Text_Read["Y_size"] / static_cast<double>(1080);
+		::loadimage(img, address, NULL, NULL, true);
+		int x = img->getwidth();
+		int y = img->getheight();
+		::loadimage(img, address, x * r_x * dx, y * r_y *dy, true);
+}
 /*********
+* 10000 + kf -> exist 11000 + kf -> -exist
+* 20000 + kf -> intellect 21000 + kf -> -intellect
+* 30000 + kf -> anchored
+* 40000 + kf -> affect
+* 50000 + kf -> understand
+* 60000 + kf -> observatuon
 * 
 * 
-* 
-* 
+				case 0xA610:
+					if (kfp)
+					{
+						kfp = false;
+					}
+					break;
+				case 0xA620:
+					if (kfp)
+					{
+						kfp = false;
+					}
+					break;
+				case 0xA630:
+					if (kfp && player_count >= 3)
+					{
+						kfp = false;
+					}
+					break;
+				case 0xA640:
+					if (kfp && player_count >= 4)
+					{
+						kfp = false;
+					}
+					break;
 ********/

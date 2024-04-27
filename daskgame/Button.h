@@ -22,6 +22,7 @@ class Button
 	};
 public:
 	int button(int ip_x, int ip_y, int list);
+	void loadimage(IMAGE* img, LPCTSTR address, int value, int list, double a = 1);
 private:
-	IMAGE image[500];
+	inline static IMAGE image[500];
 };

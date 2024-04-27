@@ -1,6 +1,7 @@
 #pragma once
 #include "Windows.h"
 #include "Button.h"
+#include "card.h"
 struct Player_Data
 {
 	IMAGE Name[2];
@@ -12,8 +13,10 @@ struct Player_Data
 	int anchored;				//錨定值
 	int affect;					//影響值
 	int understand;				//理解值
-	unsigned int observatuon;	//觀測值
+	int observatuon;			//觀測值
 	int Race;					//種族
+	int EX_Race;				//種族
+	int Rsp;					//順位
 };
 class menu
 {
@@ -29,18 +32,23 @@ public:
 	void Menu();
 	std::string input_string(int a);
 	void atk_int();
-	void image_load(int scenes, int x, int y);
+	void image_load(int scenes);
 	void scenes_home(int x, int y);
 	void default_value(int a, int b);
 	int rand_v(const int a = 0, const int b = 0);
 	std::string Player_NAME_RAND(const int num);
-	void player_set(int x, int y, int a);
-	void player_run_scenes(int x);
-	void player_card_use(int x, int y, int a);
+	void player_set(int x, int y, int player);
+	void player_run_scenes();
+	void player_card_use(int player);
+	void atk_scenes(int player);
 	void game_run_end(int a, int b);
+	void word_lib(u_string lib);
+	void putimage(int x, int y, const IMAGE* image);
+	void loadimage(IMAGE* img, LPCTSTR address, double dx = 1, double dy = 1);
 private:
 	ExMessage input;
-	IMAGE number[11];
-	IMAGE image[500];
-	IMAGE Word[500];
+	inline static IMAGE e_number[11];
+	inline static IMAGE number[11];
+	inline static IMAGE image[500];
+	inline static IMAGE Word[500];
 };
