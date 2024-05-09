@@ -10,6 +10,12 @@
 		"number_8": "./image/number/8.png",
 		"number_9": "./image/number/9.png",
 		"number_0": "./image/number/0.png",
+		"number_A": "./image/number/A.png",
+		"number_B": "./image/number/B.png",
+		"number_C": "./image/number/C.png",
+		"number_D": "./image/number/D.png",
+		"number_E": "./image/number/E.png",
+		"number_F": "./image/number/F.png",
 		"number_dash": "./image/number/dash.png"
 	},
 	"home": {

@@ -1,4 +1,6 @@
 #include "menu.h"
+#include "lib.h"
+#include "use_apper.h"
 Button button;
 Player_Data Player[11];
 int atk_value = NULL, now_player = NULL, list = 4, def_n = NULL;
@@ -6,8 +8,11 @@ int player_count = NULL, Game_run = 20;
 bool game_end = false;
 nlohmann::json Image_file;
 nlohmann::json Text_Read;
+sdlt::lib lib_data;
 void menu::Menu()
 {
+	lib_data.loade_c();
+	lib_data.loade_w();
 	srand((unsigned)time(NULL));
 	std::ifstream File_Raed("config.json");
 	File_Raed >> Text_Read;
@@ -53,6 +58,7 @@ void menu::Menu()
 		{
 			game_end = !game_end;
 		}
+		Sleep(1);;
 	}
 }
 void menu::atk_int()
@@ -86,6 +92,7 @@ void menu::atk_int()
 				};
 			}
 		}
+		Sleep(1);;
 	}
 	list = 4;
 }
@@ -188,60 +195,36 @@ void menu::image_load(int scenes)
 		break;
 	}
 }
-std::string menu::input_string(int a)
+std::string menu::input_string() const
 {
-	return "";
-	/*
-	TCHAR text = NULL;
-	bool r = true;
-	int x = 20;
-	while (r)
+	std::string fstr;
+	if (input.message == 0x00000100)
 	{
-		if (Windows::input_r())
+		if (input.vkcode == 0x00000000D)
 		{
-			input = Windows::INPUT_READ();
-			if (input.vkcode == 0x00000000D)
+			return "enter";
+		}
+		else if (input.vkcode != 0x8)
+		{
+			if (input.vkcode - '0' < 10)
 			{
-				r = false;
+				fstr += input.vkcode;
 			}
-			else if (input.message == 0x00000100)
+			else if (input.vkcode - '0' > 47)
 			{
-				if (input.vkcode != 0x8)
-				{
-					if (input.vkcode - '0' < 10)
-					{
-						Player[player].Name += input.vkcode;
-						text += input.vkcode;
-					}
-					else if (input.vkcode - '0' > 47)
-					{
-						Player[player].Name += input.vkcode - 48;
-						text += input.vkcode - 48;
-					}
-					else
-					{
-						Player[player].Name += input.vkcode + 32;
-						text += input.vkcode + 32;
-					};
-					outtextxy(x, 20, text);
-					text = NULL;
-					x += 15;
-				}
-				else
-				{
-					x -= 15;
-					if (x <= 20)
-					{
-						x = 20;
-					}
-					outtextxy(x, 20, "		");
-				}
-				std::cout << input.vkcode - '0' << " ";
+				fstr += input.vkcode - 48;
+			}
+			else
+			{
+				fstr += input.vkcode + 32;
 			}
 		}
+		else
+		{
+			return "remove";
+		}
 	}
-	return Player[player].Name;
-	*/
+	return fstr;
 }
 /***********
 * char to TCHAR
@@ -337,6 +320,7 @@ void menu::scenes_home(int x, int y)
 							{
 								Player[run_for_int].Rsp = player_count - run_for_int;
 								player_set(x, y, run_for_int);
+								Sleep(1);
 							};
 						};
 					};
@@ -346,6 +330,7 @@ void menu::scenes_home(int x, int y)
 				else { putimage(952, 638 + 5, &number[1]); putimage(955 + 43 * static_cast<double>(x / static_cast <double>(1920)), 638 + 5, &number[0]); }
 			};
 		};
+		Sleep(1);
 	};
 	cleardevice();
 }
@@ -685,8 +670,8 @@ void menu::player_set(int x, int y, int player)
 	putimage(1625, 600, &image[28]);
 	putimage(1625, 640, &image[29]);
 	putimage((1920 - 350), (1080 - 70), &image[2]);
-	Player[player].Name_NUMBER[0] = rand_v(39, 1);
-	Player[player].Name_NUMBER[1] = rand_v(39, 41);
+	Player[player].Name_NUMBER[0] = rand_v(40, 1);
+	Player[player].Name_NUMBER[1] = rand_v(40, 41);
 	loadimage(&Player[player].Name[0], Player_NAME_RAND(Player[player].Name_NUMBER[0]).data());
 	loadimage(&Player[player].Name[1], Player_NAME_RAND(Player[player].Name_NUMBER[1]).data());
 	putimage(1354, 473, &Player[player].Name[0]);
@@ -764,8 +749,8 @@ void menu::player_set(int x, int y, int player)
 				}
 				if (button.button(input.x, input.y, 1) == 0xA590)
 				{
-					Player[player].Name_NUMBER[0] = rand_v(39, 1);
-					Player[player].Name_NUMBER[1] = rand_v(39, 41);
+					Player[player].Name_NUMBER[0] = rand_v(40, 1);
+					Player[player].Name_NUMBER[1] = rand_v(40, 41);
 					loadimage(&Player[player].Name[0], Player_NAME_RAND(Player[player].Name_NUMBER[0]).data());
 					loadimage(&Player[player].Name[1], Player_NAME_RAND(Player[player].Name_NUMBER[1]).data());
 					putimage(1354, 473, &Player[player].Name[0]);
@@ -827,6 +812,7 @@ void menu::player_set(int x, int y, int player)
 				}
 			}
 		}
+		Sleep(1);;
 	}
 }
 void menu::player_run_scenes()
@@ -834,7 +820,7 @@ void menu::player_run_scenes()
 	bool run = false;
 	bool kfp = false;
 	int lppy = NULL;
-	int pcld[10];
+	int pcld[10]{};
 	image_load(2);
 	putimage(0, 0, &image[60]);
 	putimage(130, 500, &image[66]);
@@ -860,7 +846,10 @@ void menu::player_run_scenes()
 	putimage(160, 370, &Player[pcld[1]].Name[0]); putimage(340, 370, &Player[pcld[1]].Name[1]);
 	putimage(560, 370, &Player[pcld[2]].Name[0]); putimage(740, 370, &Player[pcld[2]].Name[1]);
 	putimage(160, 620, &Player[player_count].Name[0]); putimage(340, 620, &Player[player_count].Name[1]);
-	putimage(510, 620, &Player[player_count - 1].Name[0]); putimage(690, 620, &Player[player_count - 1].Name[1]);
+	if (player_count > 0)
+	{
+		putimage(510, 620, &Player[player_count - 1].Name[0]); putimage(690, 620, &Player[player_count - 1].Name[1]);
+	}
 	switch (player_count)
 	{
 	case 3:
@@ -1011,11 +1000,14 @@ void menu::player_run_scenes()
 				}
 			}
 		}
+		Sleep(1);;
 	}
 }
 void menu::player_card_use(int player)
 {
 	bool run = false;
+	std::string flstr;
+	int fn = NULL;
 	image_load(3);
 	putimage(0, 0, &image[30]);
 	putimage(100, 220, &image[50]); putimage(270, 223, &Player[player].Name[0]); putimage(435, 223, &Player[player].Name[1]);
@@ -1110,7 +1102,7 @@ void menu::player_card_use(int player)
 		if (Windows::input_r())
 		{
 			input = Windows::INPUT_READ();
-			if (input.message == 0x00000201)
+			if (input.message == 0x00000201 || input.message == 0x00000100)
 			{
 				switch (button.button(input.x, input.y, 3))
 				{
@@ -1119,10 +1111,13 @@ void menu::player_card_use(int player)
 				case 0xA720:
 					break;
 				case 0xA730:
+					fn = 1;
 					break;
 				case 0xA740:
+					Player[player].u_magic += input_string();
 					break;
 				case 0xA750:
+					Player[player].u_tao += input_string();
 					break;
 				case 0xA760:
 					atk_scenes(player);
@@ -1134,17 +1129,73 @@ void menu::player_card_use(int player)
 				case 0xA700:
 					break;
 				default:
+					if (fn == 1)
+					{
+						if (input_string() == "remove")
+						{
+							if (Player[player].u_card.size() > 0)
+							{
+								for (auto i = 0; i < Player[player].u_card.size() - 1; i++)
+								{
+									flstr += Player[player].u_card[i];
+								}
+								Player[player].u_card = flstr;
+								flstr.clear();
+							}
+						}
+						else if (input_string() == "enter")
+						{
+							lib_data.word_lib(Player[player].u_card);
+							lib_data.card_lib(Player[player].u_card);
+							Player[player].u_card.clear();
+						}
+						else
+						{
+							if (Player[player].u_card.size() < 5)
+							{
+								switch (input_string()[0])
+								{
+								case '1':	case '2':
+								case '3':	case '4':
+								case '5':	case '6':
+								case '7':	case '8':
+								case '9':	case '0':
+									Player[player].u_card += input_string();
+									break;
+								case 'a':	case 'A':
+									Player[player].u_card += 'A';
+									break;
+								case 'b':	case 'B':
+									Player[player].u_card += 'B';
+									break;
+								case 'c':	case 'C':
+									Player[player].u_card += 'C';
+									break;
+								case 'd':	case 'D':
+									Player[player].u_card += 'D';
+									break;
+								case 'e':	case 'E':
+									Player[player].u_card += 'E';
+									break;
+								case 'f':	case 'F':
+									Player[player].u_card += 'F';
+									break;
+								default:
+									break;
+								}
+							}
+						}
+					}
 					break;
 				}
 			}
 		}
+		Sleep(1);
 	}
 }
 void menu::atk_scenes(int player)
 {
 	bool run = false;
-	u_string kbipt = NULL;
-	h16 atkp = NULL;
 	image_load(4);
 	putimage(0, 0, &image[100]);
 	putimage(100, 170, &image[113]);
@@ -1178,7 +1229,6 @@ void menu::atk_scenes(int player)
 			input = Windows::INPUT_READ();
 			if (input.message == 0x00000201)
 			{
-				atkp = button.button(input.x, input.y, 4) - 0xAD0;
 				switch (button.button(input.x, input.y, 4))
 				{
 				case 0xAD1:
@@ -1233,56 +1283,12 @@ void menu::atk_scenes(int player)
 				}
 			}
 		}
+		Sleep(1);;
 	}
 }
 void menu::game_run_end(int a, int b)
 {
 	
-}
-void menu::word_lib(u_string lib)
-{
-	h16 dtade = 0;
-	if (lib[0] == 'F' || lib[0] == 'f')
-	{
-		dtade = 1;
-	}
-	switch (lib[dtade])
-	{
-	case '1':
-		break;
-	case '2':
-		break;
-	case '3':
-		break;
-	case '4':
-		break;
-	case '5':
-		break;
-	case '6':
-		break;
-	case '7':
-		break;
-	case '8':
-		break;
-	case '9':
-		break;
-	case '0':
-		break;
-	case 'A': case 'a':
-		break;
-	case 'B': case 'b':
-		break;
-	case 'C': case 'c':
-		break;
-	case 'D': case 'd':
-		break;
-	case 'E': case 'e':
-		break;
-	case 'F': case 'f':
-		break;
-	default:
-		break;
-	}
 }
 void menu::putimage(int x, int y, const IMAGE* image)
 {

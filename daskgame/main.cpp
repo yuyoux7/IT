@@ -13,7 +13,6 @@ int main()
 	Windows Windows(x, y, 1 | 8);
 	Windows.Title("®à¹C");					//±MÃD
 	menu Menu{};
-	card::data_load("./data.json");
 	setbkmode(TRANSPARENT);
 	setbkcolor(BLACK);
 	cleardevice();
