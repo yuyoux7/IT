@@ -1,0 +1,25 @@
+@charset "UTF-8";
+body {
+	padding: 0 0;
+	margin: 0;
+	overflow: hidden;
+}
+
+.Home {
+	padding: 0;
+	margin: 0;
+	background: #00ffffff;
+	background-size: cover;
+	overflow: hidden;
+	height: 1056px;
+	width: auto;
+}
+
+.button-class {
+	background: #00000000;
+	resize: none;
+	border: none;
+	padding: 0 0;
+	width: auto;
+	height: auto;
+}
