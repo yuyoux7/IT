@@ -5,9 +5,9 @@
 #define Count 0xFFFF
 struct Button_ip
 {
-	double X_ip;
-	double Y_ip;
-	int button_value;
+	double X_ip{};
+	double Y_ip{};
+	int button_value{};
 	std::string fn;
 };
 class Button

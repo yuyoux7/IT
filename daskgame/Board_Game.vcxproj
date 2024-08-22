@@ -152,6 +152,7 @@
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="lib.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="mapll.cpp" />
     <ClCompile Include="menu.cpp" />
     <ClCompile Include="use_apper.cpp" />
     <ClCompile Include="Windows.cpp" />
@@ -160,6 +161,7 @@
     <ClInclude Include="Button.h" />
     <ClInclude Include="GUI.h" />
     <ClInclude Include="lib.h" />
+    <ClInclude Include="mapll.h" />
     <ClInclude Include="menu.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="use_apper.h" />

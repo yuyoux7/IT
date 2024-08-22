@@ -33,6 +33,9 @@
     <ClCompile Include="use_apper.cpp">
       <Filter>來源檔案</Filter>
     </ClCompile>
+    <ClCompile Include="mapll.cpp">
+      <Filter>來源檔案</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="menu.h">
@@ -54,6 +57,9 @@
       <Filter>標頭檔</Filter>
     </ClInclude>
     <ClInclude Include="use_apper.h">
+      <Filter>標頭檔</Filter>
+    </ClInclude>
+    <ClInclude Include="mapll.h">
       <Filter>標頭檔</Filter>
     </ClInclude>
   </ItemGroup>

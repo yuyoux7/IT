@@ -6,8 +6,10 @@ namespace sdlt {
 	public:
 		void loade_w();
 		void loade_c();
-		std::string word_lib(std::string card_v);
-		int card_lib(std::string card_v);
+		bool lib_get(std::string fn);
+		std::string fn_get(std::string fn);
+		long long fc_get(std::string fn);
+		long long pom(int a, unsigned int b);
 	private:
 		nlohmann::json word;
 		nlohmann::json card;

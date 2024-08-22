@@ -1,8 +1,11 @@
 #include "menu.h"
 #include "lib.h"
 #include "use_apper.h"
+#include "mapll.h"
+mapll mp;
 Button button;
 Player_Data Player[11];
+use_apper Dtldply;
 int atk_value = NULL, now_player = NULL, list = 4, def_n = NULL;
 int player_count = NULL, Game_run = 20;
 bool game_end = false;
@@ -11,8 +14,6 @@ nlohmann::json Text_Read;
 sdlt::lib lib_data;
 void menu::Menu()
 {
-	lib_data.loade_c();
-	lib_data.loade_w();
 	srand((unsigned)time(NULL));
 	std::ifstream File_Raed("config.json");
 	File_Raed >> Text_Read;
@@ -63,37 +64,21 @@ void menu::Menu()
 }
 void menu::atk_int()
 {
-	bool choose = true;
-	while (choose)
+	switch (button.button(0, 0, 4))
 	{
-		if (Windows::input_r())
-		{
-			input = Windows::INPUT_READ();
-			if (input.message == 0x00000202)			//·Æ¹«¥ªÁä
-			{
-				switch (button.button(0, 0, 4))
-				{
-				case 0x0000C901:
-					atk_value = Player[now_player].affect + Player[now_player].observatuon;
-					choose = false;
-					break;
-				case 0x0000C902:
-					atk_value = Player[now_player].understand + Player[now_player].observatuon;
-					choose = false;
-					break;
-				case 0x0000C903:
-					atk_value = Player[now_player].affect + Player[now_player].understand;
-					break;
-					choose = false;
-				case 0x0000001B:
-					atk_value = 0;
-					choose = false;
-					break;
-				};
-			}
-		}
-		Sleep(1);;
-	}
+	case 0x0000C901:
+		atk_value = Player[now_player].affect + Player[now_player].observatuon;
+		break;
+	case 0x0000C902:
+		atk_value = Player[now_player].understand + Player[now_player].observatuon;
+		break;
+	case 0x0000C903:
+		atk_value = Player[now_player].affect + Player[now_player].understand;
+		break;
+	case 0x0000001B:
+		atk_value = 0;
+		break;
+	};
 	list = 4;
 }
 void menu::image_load(int scenes)
@@ -127,10 +112,11 @@ void menu::image_load(int scenes)
 		loadimage(&image[24], static_cast<std::string>(Image_file["player_set"]["player_value_box"]["understand"]).data());
 		loadimage(&image[25], static_cast<std::string>(Image_file["player_set"]["player_name_box"]).data());
 		loadimage(&image[26], static_cast<std::string>(Image_file["player_set"]["rand"]).data());
-		loadimage(&image[27], static_cast<std::string>(Image_file["player_set"]["dicenumber"]).data());
-		loadimage(&image[270], static_cast<std::string>(Image_file["player_set"]["dicenumder"]).data());
+		loadimage(&image[27], static_cast<std::string>(Image_file["player_set"]["dicenumder"]).data(), 0.8, 0.8);
 		loadimage(&image[28], static_cast<std::string>(Image_file["player_set"]["up"]).data(), 0.7, 0.7);
 		loadimage(&image[29], static_cast<std::string>(Image_file["player_set"]["down"]).data(), 0.7, 0.7);
+		loadimage(&image[140], static_cast<std::string>(Image_file["player_set"]["six_dice"]).data());
+		loadimage(&image[141], static_cast<std::string>(Image_file["player_set"]["4_dice"]).data());
 		loadimage(&e_number[0], static_cast<std::string>(Image_file["number"]["number_0"]).data(), 0.78, 0.78);
 		loadimage(&e_number[1], static_cast<std::string>(Image_file["number"]["number_1"]).data(), 0.78, 0.78);
 		loadimage(&e_number[2], static_cast<std::string>(Image_file["number"]["number_2"]).data(), 0.78, 0.78);
@@ -141,6 +127,13 @@ void menu::image_load(int scenes)
 		loadimage(&e_number[7], static_cast<std::string>(Image_file["number"]["number_7"]).data(), 0.78, 0.78);
 		loadimage(&e_number[8], static_cast<std::string>(Image_file["number"]["number_8"]).data(), 0.78, 0.78);
 		loadimage(&e_number[9], static_cast<std::string>(Image_file["number"]["number_9"]).data(), 0.78, 0.78);
+		loadimage(&e_number[10], static_cast<std::string>(Image_file["number"]["number_A"]).data(), 0.78, 0.78);
+		loadimage(&e_number[11], static_cast<std::string>(Image_file["number"]["number_B"]).data(), 0.78, 0.78);
+		loadimage(&e_number[12], static_cast<std::string>(Image_file["number"]["number_C"]).data(), 0.78, 0.78);
+		loadimage(&e_number[13], static_cast<std::string>(Image_file["number"]["number_D"]).data(), 0.78, 0.78);
+		loadimage(&e_number[14], static_cast<std::string>(Image_file["number"]["number_E"]).data(), 0.78, 0.78);
+		loadimage(&e_number[15], static_cast<std::string>(Image_file["number"]["number_F"]).data(), 0.78, 0.78);
+		loadimage(&e_number[17], static_cast<std::string>(Image_file["number"]["number_dash"]).data(), 0.78, 0.78);
 		break;
 	case 2:
 		loadimage(&image[60], static_cast<std::string>(Image_file["game_round"]["bg"]).data());
@@ -174,6 +167,7 @@ void menu::image_load(int scenes)
 		loadimage(&image[46], static_cast<std::string>(Image_file["gamecard_set"]["player_value_box"]["intellect"]).data());
 		loadimage(&image[47], static_cast<std::string>(Image_file["gamecard_set"]["player_value_box"]["understand"]).data());
 		loadimage(&image[50], static_cast<std::string>(Image_file["gamecard_set"]["player_name"]).data());
+		loadimage(&image[200], static_cast<std::string>(Image_file["gamecard_set"]["move"]).data());
 		break;
 	case 4:
 		loadimage(&image[100], static_cast<std::string>(Image_file["atk_set"]["bg"]).data());
@@ -648,6 +642,7 @@ void menu::player_set(int x, int y, int player)
 	bool rca = false;
 	double r_x = x / static_cast<double>(1920);
 	double r_y = y / static_cast<double>(1080);
+	int dicenumber_v_4 = 1;
 	int dicenumber_v = 1;
 	putimage(0, 0, &image[1]);
 	putimage(50, 370 , &image[3]);
@@ -666,9 +661,14 @@ void menu::player_set(int x, int y, int player)
 	putimage(830, 874 , &image[24]);
 	putimage(1340, 400 , &image[25]);
 	putimage(1645, 385 , &image[26]);
-	putimage(1340, 600, &image[27]);
+	putimage(1530, 590, &image[27]);
+	putimage(1530, 700, &image[27]);
+	putimage(1340, 610, &image[141]);
+	putimage(1340, 720, &image[140]);
 	putimage(1625, 600, &image[28]);
+	putimage(1625, 705, &image[28]);
 	putimage(1625, 640, &image[29]);
+	putimage(1625, 745, &image[29]);
 	putimage((1920 - 350), (1080 - 70), &image[2]);
 	Player[player].Name_NUMBER[0] = rand_v(40, 1);
 	Player[player].Name_NUMBER[1] = rand_v(40, 41);
@@ -676,7 +676,8 @@ void menu::player_set(int x, int y, int player)
 	loadimage(&Player[player].Name[1], Player_NAME_RAND(Player[player].Name_NUMBER[1]).data());
 	putimage(1354, 473, &Player[player].Name[0]);
 	putimage(1605, 473, &Player[player].Name[1]);
-	putimage(1560, 615, &e_number[dicenumber_v]);
+	putimage(1560, 615, &e_number[dicenumber_v_4]);
+	putimage(1560, 725, &e_number[dicenumber_v]);
 	while (!rca)
 	{
 		if (Windows::input_r())
@@ -684,7 +685,7 @@ void menu::player_set(int x, int y, int player)
 			input = Windows::INPUT_READ();
 			if (input.message == 0x201)
 			{
-				if (button.button(input.x, input.y, 1) != 0xA500 && button.button(input.x, input.y, 1) != 0 && button.button(input.x, input.y, 1) != 0xA590 && button.button(input.x, input.y, 1) != 0xB510 && button.button(input.x, input.y, 1) != 0xB520)
+				if (button.button(input.x, input.y, 1) != 0xA500 && button.button(input.x, input.y, 1) != 0 && button.button(input.x, input.y, 1) != 0xA590 && button.button(input.x, input.y, 1) != 0xB510 && button.button(input.x, input.y, 1) != 0xB520 && button.button(input.x, input.y, 1) != 0xB511 && button.button(input.x, input.y, 1) != 0xB521)
 				{
 					Player[player].Race = button.button(input.x, input.y, 1);
 					default_value(player, 1);
@@ -758,11 +759,11 @@ void menu::player_set(int x, int y, int player)
 				}
 				if (button.button(input.x, input.y, 1) == 0xB510 && Player[player].Race != 0)
 				{
-					if (dicenumber_v < 6)
+					if (dicenumber_v_4 < 4)
 					{
-						++dicenumber_v;
+						++dicenumber_v_4;
 					}
-					putimage(1560, 615, &e_number[dicenumber_v]);
+					putimage(1560, 615, &e_number[dicenumber_v_4]);
 					default_value(player, dicenumber_v);
 					putimage(1100, 375 + 5, &e_number[Player[player].exist / 10]);// dv 1 ip
 					putimage(1140, 375 + 5, &e_number[Player[player].exist - ((Player[player].exist / 10) * 10)]);
@@ -781,11 +782,57 @@ void menu::player_set(int x, int y, int player)
 				}
 				if (button.button(input.x, input.y, 1) == 0xB520 && Player[player].Race != 0)
 				{
+					if (dicenumber_v_4 > 1)
+					{
+						--dicenumber_v_4;
+					}
+					putimage(1560, 615, &e_number[dicenumber_v_4]);
+					default_value(player, dicenumber_v);
+					putimage(1100, 375 + 5, &e_number[Player[player].exist / 10]);// dv 1 ip
+					putimage(1140, 375 + 5, &e_number[Player[player].exist - ((Player[player].exist / 10) * 10)]);
+					putimage(1080, 477 + 5, &e_number[Player[player].anchored / 100]);// dv 2 ip
+					putimage(1120, 477 + 5, &e_number[(Player[player].anchored - (Player[player].anchored / 100) * 100) / 10]);
+					putimage(1160, 477 + 5, &e_number[(Player[player].anchored - (Player[player].anchored / 100) * 100) - ((Player[player].anchored - (Player[player].anchored / 100) * 100) / 10) * 10]);
+					putimage(1100, 578 + 5, &e_number[Player[player].affect / 10]);// dv 3 ip
+					putimage(1140, 578 + 5, &e_number[Player[player].affect - ((Player[player].affect / 10) * 10)]);
+					putimage(1100, 679 + 5, &e_number[Player[player].observatuon / 10]);// dv 4 ip
+					putimage(1140, 679 + 5, &e_number[Player[player].observatuon - ((Player[player].observatuon / 10) * 10)]);
+					putimage(1080, 780 + 5, &e_number[Player[player].intellect / 100]);// dv 5 ip
+					putimage(1120, 780 + 5, &e_number[(Player[player].intellect - (Player[player].intellect / 100) * 100) / 10]);
+					putimage(1160, 780 + 5, &e_number[Player[player].intellect - ((Player[player].intellect / 100) * 100) - ((Player[player].intellect - (Player[player].intellect / 100) * 100) / 10) * 10]);
+					putimage(1100, 880 + 5, &e_number[Player[player].understand / 10]);// dv 6 ip
+					putimage(1140, 880 + 5, &e_number[Player[player].understand - ((Player[player].understand / 10) * 10)]);
+				}
+				if (button.button(input.x, input.y, 1) == 0xB511 && Player[player].Race != 0)
+				{
+					if (dicenumber_v < 6)
+					{
+						++dicenumber_v;
+					}
+					putimage(1560, 725, &e_number[dicenumber_v]);
+					default_value(player, dicenumber_v);
+					putimage(1100, 375 + 5, &e_number[Player[player].exist / 10]);// dv 1 ip
+					putimage(1140, 375 + 5, &e_number[Player[player].exist - ((Player[player].exist / 10) * 10)]);
+					putimage(1080, 477 + 5, &e_number[Player[player].anchored / 100]);// dv 2 ip
+					putimage(1120, 477 + 5, &e_number[(Player[player].anchored - (Player[player].anchored / 100) * 100) / 10]);
+					putimage(1160, 477 + 5, &e_number[(Player[player].anchored - (Player[player].anchored / 100) * 100) - ((Player[player].anchored - (Player[player].anchored / 100) * 100) / 10) * 10]);
+					putimage(1100, 578 + 5, &e_number[Player[player].affect / 10]);// dv 3 ip
+					putimage(1140, 578 + 5, &e_number[Player[player].affect - ((Player[player].affect / 10) * 10)]);
+					putimage(1100, 679 + 5, &e_number[Player[player].observatuon / 10]);// dv 4 ip
+					putimage(1140, 679 + 5, &e_number[Player[player].observatuon - ((Player[player].observatuon / 10) * 10)]);
+					putimage(1080, 780 + 5, &e_number[Player[player].intellect / 100]);// dv 5 ip
+					putimage(1120, 780 + 5, &e_number[(Player[player].intellect - (Player[player].intellect / 100) * 100) / 10]);
+					putimage(1160, 780 + 5, &e_number[Player[player].intellect - ((Player[player].intellect / 100) * 100) - ((Player[player].intellect - (Player[player].intellect / 100) * 100) / 10) * 10]);
+					putimage(1100, 880 + 5, &e_number[Player[player].understand / 10]);// dv 6 ip
+					putimage(1140, 880 + 5, &e_number[Player[player].understand - ((Player[player].understand / 10) * 10)]);
+				}
+				if (button.button(input.x, input.y, 1) == 0xB521 && Player[player].Race != 0)
+				{
 					if (dicenumber_v > 1)
 					{
 						--dicenumber_v;
 					}
-					putimage(1560, 615, &e_number[dicenumber_v]);
+					putimage(1560, 725, &e_number[dicenumber_v]);
 					default_value(player, dicenumber_v);
 					putimage(1100, 375 + 5, &e_number[Player[player].exist / 10]);// dv 1 ip
 					putimage(1140, 375 + 5, &e_number[Player[player].exist - ((Player[player].exist / 10) * 10)]);
@@ -807,6 +854,7 @@ void menu::player_set(int x, int y, int player)
 					if (Player[player].Race != 0)
 					{
 						default_value(player, dicenumber_v);
+						Player[player].mp = dicenumber_v * dicenumber_v_4;
 						rca = !rca;
 					}
 				}
@@ -831,7 +879,7 @@ void menu::player_run_scenes()
 	putimage(500, 350, &image[62]);
 	putimage(150, 600, &image[65]);
 	putimage(500, 600, &image[65]);
-	putimage(1430,970,&image[270]);
+	putimage(1430,970, &image[270]);
 	putimage(1790, 450, &e_number[Game_run / 10]); putimage(1825, 450, &e_number[Game_run - (Game_run / 10) * 10]);
 	for (auto i = 1; i <= player_count; i++)
 	{
@@ -981,7 +1029,6 @@ void menu::player_run_scenes()
 				case 0xA650: case 0xA651: case 0xA652: case 0xA653: case 0xA654:
 				case 0xA655: case 0xA656: case 0xA657: case 0xA658: case 0xA659:
 					lppy = button.button(input.x, input.y, 2) - 0xA650;
-					std::cout << lppy;
 					if (lppy <= player_count)
 					{
 						if (player_count < 10)
@@ -1007,6 +1054,8 @@ void menu::player_card_use(int player)
 {
 	bool run = false;
 	std::string flstr;
+	std::string dflstr;
+	std::string map_p;
 	int fn = NULL;
 	image_load(3);
 	putimage(0, 0, &image[30]);
@@ -1015,7 +1064,8 @@ void menu::player_card_use(int player)
 	putimage(100, 680, &image[45]); putimage(100, 780, &image[46]); putimage(100, 880, &image[47]);
 	putimage(640, 140, &image[33]); putimage(640, 280, &image[35]); putimage(640, 380, &image[34]);
 	putimage(640, 530, &image[41]); putimage(830, 210, &image[31]); putimage(970, 210, &image[32]);
-	putimage(1100, 280, &image[38]); putimage(1660, 100, &image[39]); putimage(1780, 100, &image[40]);
+	putimage(1100, 280, &image[38]); /*putimage(1660, 100, &image[39]);*/ putimage(1780, 100, &image[40]);
+	putimage(1100, 380, &image[200]);
 	//putimage(1670, 500, &e_number[Game_run / 10]); putimage(1705, 500, &e_number[Game_run - (Game_run / 10) * 10]);
 	putimage(1790, 500, &e_number[Game_run / 10]); putimage(1825, 500, &e_number[Game_run - (Game_run / 10) * 10]);
 	putimage(1570, 900, &image[36]); putimage(1570, 1010, &image[37]);
@@ -1107,17 +1157,22 @@ void menu::player_card_use(int player)
 				switch (button.button(input.x, input.y, 3))
 				{
 				case 0xA710:
+					Player[player].u_card.clear();
+					putimage(640, 140, &image[33]); putimage(830, 210, &image[31]); putimage(970, 210, &image[32]);
 					break;
 				case 0xA720:
+					Dtldply.Use_card(Player[player].u_card, player);
+					Player[player].u_card.clear();
+					putimage(640, 140, &image[33]); putimage(830, 210, &image[31]); putimage(970, 210, &image[32]);
 					break;
 				case 0xA730:
 					fn = 1;
 					break;
 				case 0xA740:
-					Player[player].u_magic += input_string();
+					fn = 2;
 					break;
 				case 0xA750:
-					Player[player].u_tao += input_string();
+					fn = 3;
 					break;
 				case 0xA760:
 					atk_scenes(player);
@@ -1126,9 +1181,17 @@ void menu::player_card_use(int player)
 				case 0xA770:
 					run = !run;
 					break;
+				case 0xA780:
+					fn = 5;
+					break;
 				case 0xA700:
+					fn = 4;
 					break;
 				default:
+					if (input.message == 0x00000201)
+					{
+						fn = 0;
+					}
 					if (fn == 1)
 					{
 						if (input_string() == "remove")
@@ -1141,13 +1204,47 @@ void menu::player_card_use(int player)
 								}
 								Player[player].u_card = flstr;
 								flstr.clear();
+								putimage(640, 140, &image[33]); putimage(830, 210, &image[31]); putimage(970, 210, &image[32]);
+								for (auto i = 0; i < Player[player].u_card.size(); i++)
+								{
+									switch (Player[player].u_card[i])
+									{
+									case '1':	case '2':
+									case '3':	case '4':
+									case '5':	case '6':
+									case '7':	case '8':
+									case '9':	case '0':
+										putimage(780 + ((i + 1) * 45), 160, &e_number[(Player[player].u_card[i] ^ 48)]);
+										break;
+									case 'a':	case 'A':
+										putimage(780 + ((i + 1) * 45), 160, &e_number[10]);
+										break;
+									case 'b':	case 'B':
+										putimage(780 + ((i + 1) * 45), 160, &e_number[11]);
+										break;
+									case 'c':	case 'C':
+										putimage(780 + ((i + 1) * 45), 160, &e_number[12]);
+										break;
+									case 'd':	case 'D':
+										putimage(780 + ((i + 1) * 45), 160, &e_number[13]);
+										break;
+									case 'e':	case 'E':
+										putimage(780 + ((i + 1) * 45), 160, &e_number[14]);
+										break;
+									case 'f':	case 'F':
+										putimage(780 + ((i + 1) * 45), 160, &e_number[15]);
+										break;
+									default:
+										break;
+									}
+								}
 							}
 						}
 						else if (input_string() == "enter")
 						{
-							lib_data.word_lib(Player[player].u_card);
-							lib_data.card_lib(Player[player].u_card);
+							Dtldply.Use_card(Player[player].u_card, player);
 							Player[player].u_card.clear();
+							putimage(640, 140, &image[33]); putimage(830, 210, &image[31]); putimage(970, 210, &image[32]);
 						}
 						else
 						{
@@ -1161,24 +1258,393 @@ void menu::player_card_use(int player)
 								case '7':	case '8':
 								case '9':	case '0':
 									Player[player].u_card += input_string();
+									putimage(780 + (Player[player].u_card.size() * 45), 160, &e_number[(input_string()[0] ^ 48)]);
 									break;
 								case 'a':	case 'A':
 									Player[player].u_card += 'A';
+									putimage(780 + (Player[player].u_card.size() * 45), 160, &e_number[10]);
 									break;
 								case 'b':	case 'B':
 									Player[player].u_card += 'B';
+									putimage(780 + (Player[player].u_card.size() * 45), 160, &e_number[11]);
 									break;
 								case 'c':	case 'C':
 									Player[player].u_card += 'C';
+									putimage(780 + (Player[player].u_card.size() * 45), 160, &e_number[12]);
 									break;
 								case 'd':	case 'D':
 									Player[player].u_card += 'D';
+									putimage(780 + (Player[player].u_card.size() * 45), 160, &e_number[13]);
 									break;
 								case 'e':	case 'E':
 									Player[player].u_card += 'E';
+									putimage(780 + (Player[player].u_card.size() * 45), 160, &e_number[14]);
 									break;
 								case 'f':	case 'F':
 									Player[player].u_card += 'F';
+									putimage(780 + (Player[player].u_card.size() * 45), 160, &e_number[15]);
+									break;
+								default:
+									break;
+								}
+							}
+						}
+					}
+					if (fn == 2)
+					{
+						if (input_string() == "remove")
+						{
+							if (Player[player].u_magic.size() > 0)
+							{
+								for (auto i = 0; i < Player[player].u_magic.size() - 1; i++)
+								{
+									flstr += Player[player].u_magic[i];
+								}
+								Player[player].u_magic = flstr;
+								flstr.clear();
+								putimage(640, 380, &image[34]); putimage(830, 210, &image[31]); putimage(970, 210, &image[32]);
+								for (auto i = 0; i < Player[player].u_magic.size(); i++)
+								{
+									switch (Player[player].u_magic[i])
+									{
+									case '1':	case '2':
+									case '3':	case '4':
+									case '5':	case '6':
+									case '7':	case '8':
+									case '9':	case '0':
+										putimage(780 + ((i + 1) * 45), 400, &e_number[(Player[player].u_magic[i] ^ 48)]);
+										break;
+									case 'a':	case 'A':
+										putimage(780 + ((i + 1) * 45), 400, &e_number[10]);
+										break;
+									case 'b':	case 'B':
+										putimage(780 + ((i + 1) * 45), 400, &e_number[11]);
+										break;
+									case 'c':	case 'C':
+										putimage(780 + ((i + 1) * 45), 400, &e_number[12]);
+										break;
+									case 'd':	case 'D':
+										putimage(780 + ((i + 1) * 45), 400, &e_number[13]);
+										break;
+									case 'e':	case 'E':
+										putimage(780 + ((i + 1) * 45), 400, &e_number[14]);
+										break;
+									case 'f':	case 'F':
+										putimage(780 + ((i + 1) * 45), 400, &e_number[15]);
+										break;
+									default:
+										break;
+									}
+								}
+							}
+						}
+						else if (input_string() == "enter")
+						{
+							Dtldply.Use_magic(Player[player].u_magic, player);
+							Player[player].u_magic.clear();
+							putimage(640, 380, &image[34]); putimage(830, 210, &image[31]); putimage(970, 210, &image[32]);
+						}
+						else
+						{
+							if (Player[player].u_magic.size() < 5)
+							{
+								switch (input_string()[0])
+								{
+								case '1':	case '2':
+								case '3':	case '4':
+								case '5':	case '6':
+								case '7':	case '8':
+								case '9':	case '0':
+									Player[player].u_magic += input_string();
+									putimage(780 + (Player[player].u_magic.size() * 45), 400, &e_number[(input_string()[0] ^ 48)]);
+									break;
+								case 'a':	case 'A':
+									Player[player].u_magic += 'A';
+									putimage(780 + (Player[player].u_magic.size() * 45), 400, &e_number[10]);
+									break;
+								case 'b':	case 'B':
+									Player[player].u_magic += 'B';
+									putimage(780 + (Player[player].u_magic.size() * 45), 400, &e_number[11]);
+									break;
+								case 'c':	case 'C':
+									Player[player].u_magic += 'C';
+									putimage(780 + (Player[player].u_magic.size() * 45), 400, &e_number[12]);
+									break;
+								case 'd':	case 'D':
+									Player[player].u_magic += 'D';
+									putimage(780 + (Player[player].u_magic.size() * 45), 400, &e_number[13]);
+									break;
+								case 'e':	case 'E':
+									Player[player].u_magic += 'E';
+									putimage(780 + (Player[player].u_magic.size() * 45), 400, &e_number[14]);
+									break;
+								case 'f':	case 'F':
+									Player[player].u_magic += 'F';
+									putimage(780 + (Player[player].u_magic.size() * 45), 400, &e_number[15]);
+									break;
+								default:
+									break;
+								}
+							}
+						}
+					}
+					if (fn == 3)
+					{
+						if (input_string() == "remove")
+						{
+							if (Player[player].u_tao.size() > 0)
+							{
+								for (auto i = 0; i < Player[player].u_tao.size() - 1; i++)
+								{
+									flstr += Player[player].u_tao[i];
+								}
+								Player[player].u_tao = flstr;
+								flstr.clear();
+								putimage(640, 280, &image[35]); putimage(830, 210, &image[31]); putimage(970, 210, &image[32]);
+								for (auto i = 0; i < Player[player].u_tao.size(); i++)
+								{
+									switch (Player[player].u_tao[i])
+									{
+									case '1':	case '2':
+									case '3':	case '4':
+									case '5':	case '6':
+									case '7':	case '8':
+									case '9':	case '0':
+										putimage(780 + ((i + 1) * 45), 300, &e_number[(Player[player].u_tao[i] ^ 48)]);
+										break;
+									case 'a':	case 'A':
+										putimage(780 + ((i + 1) * 45), 300, &e_number[10]);
+										break;
+									case 'b':	case 'B':
+										putimage(780 + ((i + 1) * 45), 300, &e_number[11]);
+										break;
+									case 'c':	case 'C':
+										putimage(780 + ((i + 1) * 45), 300, &e_number[12]);
+										break;
+									case 'd':	case 'D':
+										putimage(780 + ((i + 1) * 45), 300, &e_number[13]);
+										break;
+									case 'e':	case 'E':
+										putimage(780 + ((i + 1) * 45), 300, &e_number[14]);
+										break;
+									case 'f':	case 'F':
+										putimage(780 + ((i + 1) * 45), 300, &e_number[15]);
+										break;
+									default:
+										break;
+									}
+								}
+							}
+						}
+						else if (input_string() == "enter")
+						{
+							Dtldply.Use_tao(Player[player].u_tao, player);
+							Player[player].u_tao.clear();
+							putimage(640, 280, &image[35]); putimage(830, 210, &image[31]); putimage(970, 210, &image[32]);
+						}
+						else
+						{
+							if (Player[player].u_tao.size() < 5)
+							{
+								switch (input_string()[0])
+								{
+								case '1':	case '2':
+								case '3':	case '4':
+								case '5':	case '6':
+								case '7':	case '8':
+								case '9':	case '0':
+									Player[player].u_tao += input_string();
+									putimage(780 + (Player[player].u_tao.size() * 45), 300, &e_number[(input_string()[0] ^ 48)]);
+									break;
+								case 'a':	case 'A':
+									Player[player].u_tao += 'A';
+									putimage(780 + (Player[player].u_tao.size() * 45), 300, &e_number[10]);
+									break;
+								case 'b':	case 'B':
+									Player[player].u_tao += 'B';
+									putimage(780 + (Player[player].u_tao.size() * 45), 300, &e_number[11]);
+									break;
+								case 'c':	case 'C':
+									Player[player].u_tao += 'C';
+									putimage(780 + (Player[player].u_tao.size() * 45), 300, &e_number[12]);
+									break;
+								case 'd':	case 'D':
+									Player[player].u_tao += 'D';
+									putimage(780 + (Player[player].u_tao.size() * 45), 300, &e_number[13]);
+									break;
+								case 'e':	case 'E':
+									Player[player].u_tao += 'E';
+									putimage(780 + (Player[player].u_tao.size() * 45), 300, &e_number[14]);
+									break;
+								case 'f':	case 'F':
+									Player[player].u_tao += 'F';
+									putimage(780 + (Player[player].u_tao.size() * 45), 300, &e_number[15]);
+									break;
+								default:
+									break;
+								}
+							}
+						}
+					}
+					if (fn == 4)
+					{
+						if (input_string() == "remove")
+						{
+							if (dflstr.size() > 0)
+							{
+								for (auto i = 0; i < dflstr.size() - 1; i++)
+								{
+									flstr += dflstr[i];
+								}
+								dflstr = flstr;
+								flstr.clear();
+								putimage(1100, 280, &image[38]); putimage(830, 210, &image[31]); putimage(970, 210, &image[32]);
+								for (auto i = 0; i < dflstr.size(); i++)
+								{
+									switch (dflstr[i])
+									{
+									case '1':	case '2':
+									case '3':	case '4':
+									case '5':	case '6':
+									case '7':	case '8':
+									case '9':	case '0':
+										putimage(1240 + ((i + 1) * 45), 300, &e_number[(dflstr[i] ^ 48)]);
+										break;
+									case 'a':	case 'A':
+										putimage(1240 + ((i + 1) * 45), 300, &e_number[10]);
+										break;
+									case 'b':	case 'B':
+										putimage(1240 + ((i + 1) * 45), 300, &e_number[11]);
+										break;
+									case 'c':	case 'C':
+										putimage(1240 + ((i + 1) * 45), 300, &e_number[12]);
+										break;
+									case 'd':	case 'D':
+										putimage(1240 + ((i + 1) * 45), 300, &e_number[13]);
+										break;
+									case 'e':	case 'E':
+										putimage(1240 + ((i + 1) * 45), 300, &e_number[14]);
+										break;
+									case 'f':	case 'F':
+										putimage(1240 + ((i + 1) * 45), 300, &e_number[15]);
+										break;
+									default:
+										break;
+									}
+								}
+							}
+						}
+						else if (input_string() == "enter")
+						{
+							Dtldply.Remove_card(dflstr, player);
+							dflstr.clear();
+							putimage(1100, 280, &image[38]); putimage(830, 210, &image[31]); putimage(970, 210, &image[32]);
+						}
+						else
+						{
+							if (dflstr.size() < 5)
+							{
+								switch (input_string()[0])
+								{
+								case '1':	case '2':
+								case '3':	case '4':
+								case '5':	case '6':
+								case '7':	case '8':
+								case '9':	case '0':
+									dflstr += input_string();
+									putimage(1240 + (dflstr.size() * 45), 300, &e_number[(input_string()[0] ^ 48)]);
+									break;
+								case 'a':	case 'A':
+									dflstr += 'A';
+									putimage(1240 + (dflstr.size() * 45), 300, &e_number[10]);
+									break;
+								case 'b':	case 'B':
+									dflstr += 'B';
+									putimage(1240 + (dflstr.size() * 45), 300, &e_number[11]);
+									break;
+								case 'c':	case 'C':
+									dflstr += 'C';
+									putimage(1240 + (dflstr.size() * 45), 300, &e_number[12]);
+									break;
+								case 'd':	case 'D':
+									dflstr += 'D';
+									putimage(1240 + (dflstr.size() * 45), 300, &e_number[13]);
+									break;
+								case 'e':	case 'E':
+									dflstr += 'E';
+									putimage(1240 + (dflstr.size() * 45), 300, &e_number[14]);
+									break;
+								case 'f':	case 'F':
+									dflstr += 'F';
+									putimage(1240 + (dflstr.size() * 45), 300, &e_number[15]);
+									break;
+								default:
+									break;
+								}
+							}
+						}
+					}
+					if (fn == 5)
+					{
+						if (input_string() == "remove")
+						{
+							if (map_p.size() > 0)
+							{
+								for (auto i = 0; i < map_p.size() - 1; i++)
+								{
+									flstr += map_p[i];
+								}
+								map_p = flstr;
+								flstr.clear();
+								putimage(1100, 280, &image[38]); putimage(830, 210, &image[31]); putimage(970, 210, &image[32]); putimage(1100, 380, &image[200]);
+								for (auto i = 0; i < map_p.size(); i++)
+								{
+									switch (map_p[i])
+									{
+									case '1':	case '2':
+									case '3':	case '4':
+									case '5':	case '6':
+									case '7':	case '8':
+									case '9':	case '0':
+										putimage(1530 + ((i + 1) * 45), 400, &e_number[(map_p[i] ^ 48)]);
+										break;
+									default:
+										break;
+									}
+								}
+							}
+						}
+						else if (input_string() == "enter")
+						{
+							if (map_p.size() <= 3)
+							{
+								for (auto i = 0; i < map_p.size(); i++)
+								{
+									Player[player].mp += (map_p[i] ^ 48) * pow(10, 2 - i);
+								}
+							}
+							map_p.clear();
+							mp.turnll_mp(Player[player].mp, player);
+							Player[player].mpb = mp.get_mp(player);
+							//std::string s = Player[player].mpb ^ 48;
+							for (auto i = 0; i < 2; i++)
+							{
+								//putimage(1420 + (i * 45), 400, &e_number[((std::string))[i]]);
+							}
+						}
+						else
+						{
+							if (map_p.size() < 3)
+							{
+								switch (input_string()[0])
+								{
+								case '1':	case '2':
+								case '3':	case '4':
+								case '5':	case '6':
+								case '7':	case '8':
+								case '9':	case '0':
+									map_p += input_string();
+									putimage(1530 + (map_p.size() * 45), 400, &e_number[(input_string()[0] ^ 48)]);
 									break;
 								default:
 									break;
@@ -1210,7 +1676,16 @@ void menu::atk_scenes(int player)
 	putimage(930, 70, &image[112]); putimage(1270, 70, &image[112]); putimage(1610, 70, &image[112]);
 	putimage(930, 180, &image[112]); putimage(1270, 180, &image[112]); putimage(1610, 180, &image[112]);
 	putimage(930, 290, &image[112]); putimage(1270, 290, &image[112]); putimage(1610, 290, &image[112]);
-	/*putimage(940, 80, &Player[player].Name[0]); putimage(1110, 80, &Player[player].Name[1]);
+	for (auto i = 1; i < player_count; i++)
+	{
+		if (i == player)
+		{
+			i++;
+			putimage(940, 80, &Player[i].Name[0]); putimage(1110, 80, &Player[i].Name[1]);
+		}
+		
+	}
+	/*;
 	putimage(1280, 80, &Player[player].Name[0]); putimage(1450, 80, &Player[player].Name[1]);
 	putimage(1620, 80, &Player[player].Name[0]); putimage(1790, 80, &Player[player].Name[1]);
 	putimage(940, 190, &Player[player].Name[0]); putimage(1110, 190, &Player[player].Name[1]);
@@ -1277,7 +1752,7 @@ void menu::atk_scenes(int player)
 					putimage(930, 290, &image[112]); putimage(1270, 290, &image[112]); putimage(1610, 290, &image[111]);
 					break;
 				case 0xA990:
-					//atk_int();
+					atk_int();
 					run = !run;
 					break;
 				}
@@ -1312,8 +1787,8 @@ void menu::loadimage(IMAGE* img, LPCTSTR address, double dx, double dy)
 * 40000 + kf -> affect
 * 50000 + kf -> understand
 * 60000 + kf -> observatuon
-* 
-* 
+* 70000+ -> tao
+* 80000+ -> magic
 				case 0xA610:
 					if (kfp)
 					{

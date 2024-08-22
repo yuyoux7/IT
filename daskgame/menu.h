@@ -4,18 +4,22 @@
 struct Player_Data
 {
 	IMAGE Name[2]{};
-	int Name_NUMBER[2]{};			//名字編號
-	bool live{};					//存活狀況
+	int Name_NUMBER[2]{};		//名字編號
+	bool live{};				//存活狀況
 	bool win{};					//勝利情況
-	int exist{};					//存在值
-	int intellect{};				//理智值
+	int exist{};				//存在值
+	int intellect{};			//理智值
 	int anchored{};				//錨定值
-	int affect{};					//影響值
-	int understand{};				//理解值
+	int affect{};				//影響值
+	int understand{};			//理解值
 	int observatuon{};			//觀測值
 	int Race{};					//種族
 	int EX_Race{};				//種族
 	int Rsp{};					//順位
+	int mp{};					//地圖位置
+	int mpb{};
+	int atk_def{};
+	int atk_type{};
 	std::string u_card{};
 	std::string u_magic{};
 	std::string u_tao{};
@@ -48,7 +52,7 @@ public:
 	void loadimage(IMAGE* img, LPCTSTR address, double dx = 1, double dy = 1);
 private:
 	ExMessage input;
-	inline static IMAGE e_number[11];
+	inline static IMAGE e_number[18];
 	inline static IMAGE number[11];
 	inline static IMAGE image[500];
 	inline static IMAGE Word[500];

@@ -57,7 +57,9 @@ int Button::button(int ip_x, int ip_y, int list)
 		loadimage(&image[9], static_cast<std::string>(set["player_set"]["rand"]).data(), 0xA590, list);
 		loadimage(&image[0], static_cast<std::string>(set["player_set"]["next"]).data(), 0xA500, list);
 		loadimage(&image[10], static_cast<std::string>(set["player_set"]["up"]).data(), 0xB510, list, 0.7);
+		loadimage(&image[10], static_cast<std::string>(set["player_set"]["up"]).data(), 0xB511, list, 0.7);
 		loadimage(&image[11], static_cast<std::string>(set["player_set"]["down"]).data(), 0xB520, list, 0.7);
+		loadimage(&image[11], static_cast<std::string>(set["player_set"]["down"]).data(), 0xB521, list, 0.7);
 		if (ip_x > (1920 - 350) * r_x && ip_x < (1920 - 350) * r_x + Button_IP[player_set][0xA500].X_ip)
 		{
 			if (ip_y > (1080 - 70) * r_y && ip_y < (1080 - 70) * r_y + Button_IP[player_set][0xA500].Y_ip)
@@ -130,7 +132,7 @@ int Button::button(int ip_x, int ip_y, int list)
 		}
 		if (ip_x > 1625 * r_x && ip_x < (1625 * r_x + Button_IP[player_set][0xB510].X_ip))
 		{
-			if (ip_y > 600 * r_y && ip_y < (615 * r_y + Button_IP[player_set][0xB510].Y_ip))
+			if (ip_y > 600 * r_y && ip_y < (600 * r_y + Button_IP[player_set][0xB510].Y_ip))
 			{
 				return Button_IP[player_set][0xB510].button_value;
 			}
@@ -140,6 +142,20 @@ int Button::button(int ip_x, int ip_y, int list)
 			if (ip_y > 640 * r_y && ip_y < (640 * r_y + Button_IP[player_set][0xB520].Y_ip))
 			{
 				return Button_IP[player_set][0xB520].button_value;
+			}
+		}
+		if (ip_x > 1625 * r_x && ip_x < (1625 * r_x + Button_IP[player_set][0xB511].X_ip))
+		{
+			if (ip_y > 705 * r_y && ip_y < (705 * r_y + Button_IP[player_set][0xB511].Y_ip))
+			{
+				return Button_IP[player_set][0xB511].button_value;
+			}
+		}
+		if (ip_x > 1625 * r_x && ip_x < (1625 * r_x + Button_IP[player_set][0xB521].X_ip))
+		{
+			if (ip_y > 745 * r_y && ip_y < (745 * r_y + Button_IP[player_set][0xB521].Y_ip))
+			{
+				return Button_IP[player_set][0xB521].button_value;
 			}
 		}
 		break;
@@ -198,6 +214,7 @@ int Button::button(int ip_x, int ip_y, int list)
 		loadimage(&image[35], static_cast<std::string>(set["gamecard_set"]["taoism"]).data(), 0xA750, list);
 		loadimage(&image[36], static_cast<std::string>(set["gamecard_set"]["atk"]).data(), 0xA760, list);
 		loadimage(&image[37], static_cast<std::string>(set["gamecard_set"]["next"]).data(), 0xA770, list);
+		loadimage(&image[300], static_cast<std::string>(set["gamecard_set"]["move"]).data(), 0xA780, list);
 		loadimage(&image[38], static_cast<std::string>(set["gamecard_set"]["delete"]).data(), 0xA700, list);
 		if (ip_x > 830 * r_x && ip_x < 830 * r_x + Button_IP[gamecard_set][0xA710].X_ip)
 		{
@@ -246,6 +263,13 @@ int Button::button(int ip_x, int ip_y, int list)
 			if (ip_y > 1010 * r_y && ip_y < 1010 * r_y + Button_IP[gamecard_set][0xA770].Y_ip)
 			{
 				return Button_IP[gamecard_set][0xA770].button_value;
+			}
+		}
+		if (ip_x > 1100 * r_x && ip_x < 1100 * r_x + Button_IP[gamecard_set][0xA780].X_ip)
+		{
+			if (ip_y > 380 * r_y && ip_y < 380 * r_y + Button_IP[gamecard_set][0xA780].Y_ip)
+			{
+				return Button_IP[gamecard_set][0xA780].button_value;
 			}
 		}
 		if (ip_x > 1100 * r_x && ip_x < 1100 * r_x + Button_IP[gamecard_set][0xA700].X_ip)

@@ -35,6 +35,8 @@
 		"dicenumder": "./image/player_set/dicenumder.png",
 		"up": "./image/player_set/up.png",
 		"down": "./image/player_set/down.png",
+		"six_dice":"./image/player_set/6dice.png",
+		"4_dice":"./image/player_set/4dice.png",
 		"player_value_box": {
 			"exist": "./image/player_set/value1.png",
 			"anchored": "./image/player_set/value2.png",
@@ -179,7 +181,8 @@
 		"now_step": "./image/gamecard_set/place.png",
 		"delete": "./image/gamecard_set/delete.png",
 		"atk": "./image/gamecard_set/atk.png",
-		"next": "./image/gamecard_set/next.png"
+		"next": "./image/gamecard_set/next.png",
+		"move":"./image/gamecard_set/move.png"
 	},
 	"atk_set": {
 		"bg": "./image/atk_scenes/bg.png",

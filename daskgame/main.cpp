@@ -1,5 +1,6 @@
 #include "menu.h"
 #include "Windows.h"
+#include "mapll.h"
 int main()
 {
 	nlohmann::json Text_Read, Text_Write;
@@ -10,10 +11,9 @@ int main()
 	File_Raed.close();
 	int x = Text_Read["X_size"];
 	int y = Text_Read["Y_size"];
-	Windows Windows(x, y, 1 | 8);
+	Windows Windows(x, y, 0 | 8);
 	Windows.Title("®à¹C");					//±MÃD
 	menu Menu{};
-	setbkmode(TRANSPARENT);
 	setbkcolor(BLACK);
 	cleardevice();
 	Menu.Menu();
