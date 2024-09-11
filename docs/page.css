@@ -15,11 +15,20 @@ body {
 	width: auto;
 }
 
-.button-class {
+.buttonclass {
 	background: #00000000;
 	resize: none;
 	border: none;
 	padding: 0 0;
 	width: auto;
 	height: auto;
+}
+
+.char {
+	margin: 0 100px;
+	padding: 10px 10px;
+	resize: none;
+	overflow: hidden;
+	background: #00ff5f;
+	color: black;
 }
